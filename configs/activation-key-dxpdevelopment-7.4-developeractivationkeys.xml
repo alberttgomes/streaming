@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<license>
+	<account-name>Liferay, Inc.</account-name>
+	<owner>Lazaro Costa</owner>
+	<description>Liferay, Inc. Developer Activation Keys</description>
+	<product-name>DXP Development</product-name>
+	<product-version>7.4</product-version>
+	<license-name>Digital Enterprise Development</license-name>
+	<license-type>developer</license-type>
+	<license-version>6</license-version>
+	<start-date>Friday, May 19, 2023 8:20:33 PM GMT</start-date>
+	<expiration-date>Sunday, April 25, 2123 8:20:33 PM GMT</expiration-date>
+	<max-http-sessions>5</max-http-sessions>
+	<key>864826d3bb17de621644ca4c79efad208a06fac26b871e987b1c3b20cade9e9080e9134f615634531fcbd749f9bcb77cd8f58b2fa120761091a42be3e91b24e18f04cb3962e3efef12f70c8b4c7e9060bb7a94dfec12e4ecad479827d7bbc8384c41cc0353b642cdf962a0a791850356788e06cc95985836addd9274578e4e02f0e98f8d</key>
+</license>
