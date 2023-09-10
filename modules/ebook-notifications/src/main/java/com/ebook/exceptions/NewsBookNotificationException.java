@@ -3,7 +3,7 @@ package com.ebook.exceptions;
 /**
  * @author Albert Gomes Cabral
  */
-public class NewsBookNotificationException extends RuntimeException {
+public class NewsBookNotificationException extends Throwable {
     public NewsBookNotificationException(String message) {
         super(message);
     }
