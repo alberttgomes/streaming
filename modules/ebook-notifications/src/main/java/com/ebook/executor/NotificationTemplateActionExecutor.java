@@ -1,4 +1,4 @@
-package com.ebook.helper;
+package com.ebook.executor;
 
 import com.ebook.exceptions.NewsBookNotificationException;
 import com.ebook.module.NotificationNewsEbookModel;
@@ -8,7 +8,6 @@ import com.liferay.notification.model.NotificationTemplate;
 import com.liferay.notification.service.NotificationTemplateLocalService;
 import com.liferay.notification.type.NotificationType;
 import com.liferay.notification.type.NotificationTypeServiceTracker;
-import com.liferay.object.action.executor.ObjectActionExecutor;
 import com.liferay.portal.kernel.json.JSONObject;
 import  com.ebook.constants.NotificationNewsEbookConstants;
 import com.liferay.portal.kernel.util.*;
@@ -20,10 +19,9 @@ import java.util.Map;
 /**
  * @author Albert Gomes Cabral
  */
-@Component(service = NotificationTemplateObjectExecutor.class)
-public class NotificationTemplateObjectExecutor implements ObjectActionExecutor {
+@Component(service = NotificationActionExecutorImpl.class)
+public class NotificationTemplateActionExecutor {
 
-    @Override
     public void execute(
             long companyId, UnicodeProperties parametersUnicodeProperties,
             JSONObject payloadJSONObject, long userId)
@@ -48,14 +46,16 @@ public class NotificationTemplateObjectExecutor implements ObjectActionExecutor 
         Map<String, Object> termValues =
                 _getTermValues(journalArticleModel, currentVariables);
 
-
-
     }
 
     private Map<String, Object> _getTermValues(
             JournalArticle journalArticle, Map<String, Object> variables) {
 
-        Map<String, Object> termValues = (Map<String, Object>)variables.get("modelBase");
+        Map<String, Object> termValues =
+                HashMapBuilder.put(
+                    "term_values_key",
+                    variables.get("modelBase")
+                ).build();
 
         for (JournalArticle articleField :
                 _journalArticleLocalServiceUtil.getArticles(
@@ -71,7 +71,6 @@ public class NotificationTemplateObjectExecutor implements ObjectActionExecutor 
 
             NotificationNewsEbookModel notificationNewsEbookModel =
                     fetchNotificationNewsEbookModel(
-                            articleField.getTitle(),
                             (Long) termValues.get(articleField.getResourcePrimKey()));
 
             if (notificationNewsEbookModel != null) {
@@ -86,29 +85,27 @@ public class NotificationTemplateObjectExecutor implements ObjectActionExecutor 
     private Map<String, Object> _getVariables(
             JournalArticle journalArticle, JSONObject payloadJSONObject) {
 
-        Map<String, Object> variables =
-            HashMapBuilder.<String, Object>put(
-                    "creator",
-                    () -> {
-                        if (journalArticle == null) {
-                            return null;
-                        }
+        return HashMapBuilder.<String, Object>put(
+            "creator",
+            () -> {
+                if (journalArticle == null) {
+                    return null;
+                }
 
-                        return MapUtil.getString(
-                                (Map<String, Object>)payloadJSONObject.get(
-                                        "baseModel"), "userId");
-                    }
-            ).put(
-                    "currentUserId", journalArticle.getUserId()
-            ).put(
-                    "content", journalArticle
-            ).build();
-
-        return variables;
+                return MapUtil.getString(
+                        (Map<String, Object>)
+                                payloadJSONObject.get("messageModel"),
+                                (String) payloadJSONObject.get("userId"));
+            }
+        ).put(
+            "currentUserId", journalArticle.getUserId()
+        ).put(
+            "content", journalArticle
+        ).build();
     }
 
     public NotificationNewsEbookModel fetchNotificationNewsEbookModel(
-            String name, long notificationNewsEbookId) {
+            long notificationNewsEbookId) {
 
         NotificationNewsEbookModel notificationNewsEbookModel
                 = new NotificationNewsEbookModel();
@@ -124,7 +121,6 @@ public class NotificationTemplateObjectExecutor implements ObjectActionExecutor 
         return notificationNewsEbookModel;
     }
 
-    @Override
     public String getKey() {
         return NotificationNewsEbookConstants.KEY_NOTIFICATION;
     }

@@ -1,18 +1,14 @@
 package com.ebook.portlet;
 
 import com.ebook.constants.NotificationsEbookPortletKeys;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
-
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-
 import org.osgi.service.component.annotations.Component;
-
 import java.io.IOException;
 
 /**
@@ -43,8 +39,10 @@ public class NotificationsEbookPortlet extends MVCPortlet {
 	};
 
 	public String getPortletId() {
-		return "com_ebook_portlet_" + "NotificationsEbookPortlet_";
+		return "com_ebook_portlet_"
+				+ "NotificationsEbookPortlet_";
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(NotificationsEbookPortlet.class);
+	private static final Log _log =
+			LogFactoryUtil.getLog(NotificationsEbookPortlet.class);
 }
