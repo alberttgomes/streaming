@@ -4,6 +4,7 @@ import com.ebook.exceptions.NewsBookNotificationException;
 import com.ebook.module.NotificationNewsEbookModel;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.service.JournalArticleLocalService;
+import com.liferay.notification.context.NotificationContextBuilder;
 import com.liferay.notification.model.NotificationTemplate;
 import com.liferay.notification.service.NotificationTemplateLocalService;
 import com.liferay.notification.type.NotificationType;
@@ -19,13 +20,14 @@ import java.util.Map;
 /**
  * @author Albert Gomes Cabral
  */
-@Component(service = NotificationActionExecutorImpl.class)
-public class NotificationTemplateActionExecutor {
+@Component(service = NotificationTemplateActionExecutor.class)
+public class NotificationTemplateActionExecutor implements NotificationActionExecutor {
 
+    @Override
     public void execute(
             long companyId, UnicodeProperties parametersUnicodeProperties,
             JSONObject payloadJSONObject, long userId)
-        throws Exception {
+            throws Exception, NewsBookNotificationException {
 
         NotificationTemplate notificationTemplate =
                 _notificationTemplateLocalService.getNotificationTemplate(
@@ -46,15 +48,34 @@ public class NotificationTemplateActionExecutor {
         Map<String, Object> termValues =
                 _getTermValues(journalArticleModel, currentVariables);
 
+        notificationType.sendNotification(
+                new NotificationContextBuilder(
+                ).className(
+                        journalArticleModel.getClassName()
+                ).classPK(
+                        GetterUtil.getLong(termValues.get("id"))
+                ).externalReferenceCode(
+                        GetterUtil.getString(termValues.get("externalReferenceCode"))
+                ).notificationTemplate(
+                        notificationTemplate
+                ).termValues(
+                        termValues
+                ).userId(
+                        userId
+                ).portletId(
+                        String.valueOf(journalArticleModel.getResourcePrimKey())
+                ).build());
+
     }
 
     private Map<String, Object> _getTermValues(
-            JournalArticle journalArticle, Map<String, Object> variables) {
+            JournalArticle journalArticle, Map<String, Object> variables)
+            throws NewsBookNotificationException {
 
         Map<String, Object> termValues =
                 HashMapBuilder.put(
-                    "term_values_key",
-                    variables.get("modelBase")
+                    "term_variables_key",
+                    variables.get("messageContent")
                 ).build();
 
         for (JournalArticle articleField :
@@ -71,7 +92,7 @@ public class NotificationTemplateActionExecutor {
 
             NotificationNewsEbookModel notificationNewsEbookModel =
                     fetchNotificationNewsEbookModel(
-                            (Long) termValues.get(articleField.getResourcePrimKey()));
+                            articleField.getResourcePrimKey());
 
             if (notificationNewsEbookModel != null) {
                 termValues.put(articleField.getTitle(),
@@ -86,26 +107,32 @@ public class NotificationTemplateActionExecutor {
             JournalArticle journalArticle, JSONObject payloadJSONObject) {
 
         return HashMapBuilder.<String, Object>put(
-            "creator",
-            () -> {
-                if (journalArticle == null) {
-                    return null;
-                }
+                "modelMessage",
+                () -> {
+                    if (payloadJSONObject == null) {
+                        return null;
+                    }
 
-                return MapUtil.getString(
-                        (Map<String, Object>)
-                                payloadJSONObject.get("messageModel"),
-                                (String) payloadJSONObject.get("userId"));
-            }
+                    return MapUtil.getString(
+                            (Map<String, ?>)
+                                    payloadJSONObject.get("messageModel"),
+                                    (String) payloadJSONObject.get("sender"));
+                }
         ).put(
-            "currentUserId", journalArticle.getUserId()
+                "articleId", journalArticle.getPrimaryKey()
         ).put(
-            "content", journalArticle
+                "currentUserId", payloadJSONObject.get("userId")
+        ).put(
+                "content", journalArticle
+        ).put(
+                "message", payloadJSONObject.get("message")
+        ).put(
+                "userName", payloadJSONObject.get("username")
         ).build();
     }
 
     public NotificationNewsEbookModel fetchNotificationNewsEbookModel(
-            long notificationNewsEbookId) {
+            long notificationNewsEbookId) throws NewsBookNotificationException {
 
         NotificationNewsEbookModel notificationNewsEbookModel
                 = new NotificationNewsEbookModel();
@@ -121,6 +148,7 @@ public class NotificationTemplateActionExecutor {
         return notificationNewsEbookModel;
     }
 
+    @Override
     public String getKey() {
         return NotificationNewsEbookConstants.KEY_NOTIFICATION;
     }

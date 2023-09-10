@@ -4,18 +4,18 @@ import com.ebook.constants.EbookSchedulerPortletKeys;
 
 import com.ebook.jobs.EbookSchedulerJobs;
 import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactory;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
-import javax.portlet.Portlet;
-import javax.portlet.PortletException;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
+import javax.portlet.*;
+import javax.portlet.PortletPreferences;
 
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import org.osgi.service.component.annotations.Component;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Albert Gomes Cabral
@@ -44,15 +44,41 @@ public class EbookSchedulerPortlet extends MVCPortlet {
 		_log.info("Initializing EbookSchedulerPortlet");
 
 		try {
-			_ebookSchedulerJobs.active();
-		} catch (Throwable e) {
-			throw new RuntimeException(e);
+			PortletPreferences preferences = renderRequest.getPreferences();
+
+			Map<String, String[]> mapValues = preferences.getMap();
+
+			HashMap<String, Object> properties =
+					HashMapBuilder.put(
+							"preferences_scheduler_portlet",
+							(Object) renderRequest.getPreferences()
+					).put(
+							"portlet_context",
+							renderRequest.getPortletContext()
+					).build();
+
+			EbookSchedulerJobs ebookSchedulerJobs =
+					new EbookSchedulerJobs();
+
+			_log.debug("Sending values to active method...");
+
+			ebookSchedulerJobs.active(mapValues, properties);
+
+			renderResponse.setProperty("preferences",
+					properties.get("preferences_scheduler_portlet").toString());
+
+		}
+		catch (Throwable throwable) {
+
+			_log.error("Unable to execute EbookSchedulerPortlet "
+					+ throwable);
+
+			throw new RuntimeException(throwable);
 		}
 
 	};
 
-	private static final Log _log = LogFactoryUtil.getLog(EbookSchedulerPortlet.class);
-
-	private EbookSchedulerJobs _ebookSchedulerJobs = new EbookSchedulerJobs();
+	private static final Log _log =
+			LogFactoryUtil.getLog(EbookSchedulerPortlet.class);
 
 }

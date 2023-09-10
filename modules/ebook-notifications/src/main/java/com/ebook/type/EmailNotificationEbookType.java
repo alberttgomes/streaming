@@ -38,8 +38,8 @@ import java.util.*;
 /**
  * @author Albert Gomes Cabral
  */
-@Component(service = NotificationEbookEmailType.class)
-public class NotificationEbookEmailType
+@Component(service = EmailNotificationEbookType.class)
+public class EmailNotificationEbookType
         extends BaseNotificationType implements NotificationType {
 
     public void addNotificationNewsBook(NotificationContext notificationContext)
@@ -205,7 +205,7 @@ public class NotificationEbookEmailType
     }
 
     private static final Log _log =
-            LogFactoryUtil.getLog(NotificationEbookEmailType.class);
+            LogFactoryUtil.getLog(EmailNotificationEbookType.class);
 
     @Reference
     private DLFileEntryLocalService _dlFileEntryLocalService;

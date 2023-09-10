@@ -29,7 +29,7 @@ import java.io.IOException;
 	},
 	service = Portlet.class
 )
-public class NotificationsEbookPortlet extends MVCPortlet {
+public class NotificationEbookPortlet extends MVCPortlet {
 	@Override
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
@@ -44,5 +44,5 @@ public class NotificationsEbookPortlet extends MVCPortlet {
 	}
 
 	private static final Log _log =
-			LogFactoryUtil.getLog(NotificationsEbookPortlet.class);
+			LogFactoryUtil.getLog(NotificationEbookPortlet.class);
 }

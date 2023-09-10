@@ -3,16 +3,18 @@ package com.ebook.type;
 import com.liferay.notification.context.NotificationContext;
 import com.liferay.notification.model.NotificationTemplate;
 import com.liferay.notification.type.BaseNotificationType;
-import com.liferay.notification.type.NotificationType;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
+import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserNotificationDeliveryConstants;
-import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.service.UserNotificationEventLocalService;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import org.osgi.framework.BundleContext;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 
 import java.util.ArrayList;
@@ -20,11 +22,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Albert Gomes
+ * @author Albert Gomes Cabral
  */
-@Component(service = NotificationEbookUserType.class)
-public class NotificationEbookUserType
-        extends BaseNotificationType implements NotificationType {
+@Component(service = UserNotificationEbookType.class)
+public class UserNotificationEbookType extends BaseNotificationType {
 
     @Override
     public void sendNotification(NotificationContext notificationContext)
@@ -66,6 +67,8 @@ public class NotificationEbookUserType
                         "userFullName", usersProvider.getFullName()
                 ).build());
 
+        siteDefaultLocale = portal.getSiteDefaultLocale(usersProvider.getGroupId());
+        userLocale = usersProvider.getLocale();
 
         prepareNotificationContext(
                 usersProvider, null, notificationContext, notificationRecipientSettings,
@@ -74,6 +77,17 @@ public class NotificationEbookUserType
 
         notificationQueueEntryLocalService.addNotificationQueueEntry(
                 notificationContext);
+    }
+
+    @Activate
+    protected void activate(BundleContext bundleContext) {
+        _serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
+                bundleContext, User.class, "recipient.type");
+    }
+
+    @Deactivate
+    protected void deactivate() {
+        _serviceTrackerMap.close();
     }
 
     private ServiceTrackerMap<String, User> _serviceTrackerMap;

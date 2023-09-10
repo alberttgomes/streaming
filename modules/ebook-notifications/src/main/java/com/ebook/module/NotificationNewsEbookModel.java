@@ -7,6 +7,7 @@ import java.util.List;
  * @author Albert Gomes Cabral
  */
 public class NotificationNewsEbookModel {
+
     public Date getCreateDate() {
         return createDate;
     }
@@ -31,12 +32,30 @@ public class NotificationNewsEbookModel {
         this.message = message;
     }
 
-    public long getNotificationNewsEbookId(long notificationNewsEbookId) {
+    public long getNotificationNewsEbookId() {
+        return notificationNewsEbookId;
+    }
+
+    public long getNotificationNewsEbookId(
+            long notificationNewsEbookIdParam) {
+
+        if (notificationNewsEbookIdParam < 0) {
+            return -1;
+        }
+
         return notificationNewsEbookId;
     }
 
     public void setNotificationNewsEbookId(long notificationNewsEbookId) {
         this.notificationNewsEbookId = notificationNewsEbookId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     public String getSender() {
@@ -54,6 +73,8 @@ public class NotificationNewsEbookModel {
     private List<String[]> message;
 
     private long notificationNewsEbookId;
+
+    private String userId;
 
     private String sender;
 
