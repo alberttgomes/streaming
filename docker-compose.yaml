@@ -3,7 +3,7 @@ services:
       image: legends-portal-database/mysql
       build:
         context: ./
-        dockerfile: ./env_setup_docker/database/Dockerfile
+        dockerfile: ./environment/database/Dockerfile
       ports:
         - "3307:3306"
       environment:
