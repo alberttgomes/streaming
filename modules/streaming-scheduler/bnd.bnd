@@ -1,0 +1,5 @@
+Bundle-Name: ebook-scheduler
+Bundle-SymbolicName: com.streaming.scheduler
+Bundle-Version: 1.0.0
+Export-Package: com.ebook.*
+Import-Package: *; version=1.0.0;

@@ -1,4 +1,0 @@
-Bundle-Name: ebook-notifications
-Bundle-SymbolicName: com.ebook
-Bundle-Version: 1.0.0
-Export-Package: com.ebook.constants
