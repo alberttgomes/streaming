@@ -1,4 +1,4 @@
-package com.streaming.module;
+package com.streaming.model;
 
 import java.util.Date;
 import java.util.List;

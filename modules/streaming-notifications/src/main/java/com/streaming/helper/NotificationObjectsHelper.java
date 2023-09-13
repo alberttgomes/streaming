@@ -27,38 +27,29 @@ public class NotificationObjectsHelper {
             List<Long> fileEntryIds, String externalReferenceCode,
             Map<String, Object> termValues, ThemeDisplay themeDisplay) {
 
-        _notificationContext
-                .setClassPK(classPK);
-        _notificationContext
-                .setFileEntryIds(fileEntryIds);
-        _notificationContext
-                .setClassName(
+        _notificationContext.setClassPK(classPK);
+        _notificationContext.setFileEntryIds(fileEntryIds);
+        _notificationContext.setClassName(
                         NotificationEbookPortlet.class.getName());
-        _notificationContext
-                .setExternalReferenceCode(externalReferenceCode);
-        _notificationContext
-                .setNotificationQueueEntry(_notificationQueueEntry);
-        _notificationContext
-                .setUserId(themeDisplay.getUserId());
-        _notificationContext
-                .setAttachmentObjectFieldIds(attachmentObjectFieldIds);
-        _notificationContext
-                .setNotificationRecipientSettings(
+        _notificationContext.setExternalReferenceCode(
+                externalReferenceCode);
+        _notificationContext.setNotificationQueueEntry(
+                _notificationQueueEntry);
+        _notificationContext.setUserId(themeDisplay.getUserId());
+        _notificationContext.setAttachmentObjectFieldIds(
+                attachmentObjectFieldIds);
+        _notificationContext.setNotificationRecipientSettings(
                         _notificationRecipientSettingsList);
-        _notificationContext
-                .setPortletId(
-                        NotificationsEbookPortletKeys
-                                .NOTIFICATIONSEBOOK);
-        _notificationContext
-                .setNotificationRecipient(_notificationRecipient);
-        _notificationContext
-                .setNotificationTemplate(_notificationTemplate);
-        _notificationContext
-                .setTermValues(termValues);
-        _notificationContext
-                .setType(NotificationConstants.TYPE_EMAIL);
-        _notificationContext
-                .setType(MessageConstants.NEWS_STREAMING_MESSAGE);
+        _notificationContext.setPortletId(
+                        NotificationsEbookPortletKeys.NOTIFICATIONSEBOOK);
+        _notificationContext.setNotificationRecipient(
+                _notificationRecipient);
+        _notificationContext.setNotificationTemplate(
+                _notificationTemplate);
+        _notificationContext.setTermValues(termValues);
+        _notificationContext.setType(NotificationConstants.TYPE_EMAIL);
+        _notificationContext.setType(
+                MessageConstants.NEWS_STREAMING_MESSAGE);
 
         return _notificationContext;
     }
@@ -70,32 +61,19 @@ public class NotificationObjectsHelper {
             Map<String, Object> attributes, long mvccVersion,
             long primaryKey, boolean newEntry, Date sentDate) {
 
-        _notificationQueueEntry
-                .setBody(body);
-        _notificationQueueEntry
-                .setClassName(className);
-        _notificationQueueEntry
-                .setNotificationQueueEntryId(
+        _notificationQueueEntry.setBody(body);
+        _notificationQueueEntry.setClassName(className);
+        _notificationQueueEntry.setNotificationQueueEntryId(
                         notificationQueueEntryId);
-        _notificationQueueEntry
-                .setClassPK(classPK);
-        _notificationQueueEntry
-                .setType(type);
-        _notificationQueueEntry
-                .setCompanyId(companyId);
-        _notificationQueueEntry
-                .setCreateDate(createDate);
-        _notificationQueueEntry
-                .setModelAttributes(attributes);
-        _notificationQueueEntry
-                .setMvccVersion(mvccVersion);
-        _notificationQueueEntry
-                .setPrimaryKey(primaryKey);
-        _notificationQueueEntry
-                .setNew(newEntry);
-        _notificationQueueEntry
-                .setSentDate(sentDate);
-
+        _notificationQueueEntry.setClassPK(classPK);
+        _notificationQueueEntry.setType(type);
+        _notificationQueueEntry.setCompanyId(companyId);
+        _notificationQueueEntry.setCreateDate(createDate);
+        _notificationQueueEntry.setModelAttributes(attributes);
+        _notificationQueueEntry.setMvccVersion(mvccVersion);
+        _notificationQueueEntry.setPrimaryKey(primaryKey);
+        _notificationQueueEntry.setNew(newEntry);
+        _notificationQueueEntry.setSentDate(sentDate);
 
         return _notificationQueueEntry;
     }

@@ -1,7 +1,7 @@
 package com.streaming.executor;
 
 import com.streaming.exceptions.NotificationMessageException;
-import com.streaming.module.NotificationNewsStreamingModel;
+import com.streaming.model.NotificationNewsStreamingModel;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.service.JournalArticleLocalService;
 import com.liferay.notification.context.NotificationContextBuilder;
