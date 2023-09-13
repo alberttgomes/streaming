@@ -1,4 +1,4 @@
-package com.ebook.exceptions;
+package com.streaming.exceptions;
 
 /**
  * @author Albert Gomes

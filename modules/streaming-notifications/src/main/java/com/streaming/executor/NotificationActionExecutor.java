@@ -1,6 +1,6 @@
-package com.ebook.executor;
+package com.streaming.executor;
 
-import com.ebook.exceptions.NotificationMessageException;
+import com.streaming.exceptions.NotificationMessageException;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 

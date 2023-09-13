@@ -13,14 +13,6 @@ public class PreferencesPortletModel {
         this._companyId = _companyId;
     }
 
-    public String getCategoryName() {
-        return _categoryName;
-    }
-
-    public void setCategoryName(String _categoryName) {
-        this._categoryName = _categoryName;
-    }
-
     public String getExternalReferenceCode(){
         return _externalReferenceCode;
     }
@@ -53,16 +45,34 @@ public class PreferencesPortletModel {
         this._preferences = _preferences;
     }
 
-    private long _companyId;
+    public long getMvccVersion() {
+        return _mvccVersion;
+    }
 
-    private String _categoryName;
+    public void setMvccVersion(long _mvccVersion) {
+        this._mvccVersion = _mvccVersion;
+    }
+
+    public String getVocabularyCategories() {
+        return _vocabularyCategories;
+    }
+
+    public void setVocabularyCategories(String vocabularyCategories) {
+        this._vocabularyCategories = vocabularyCategories;
+    }
+
+    private long _companyId;
 
     private String _externalReferenceCode;
 
     private long _groupId;
 
+    private long _mvccVersion;
+
     private long _userId;
 
     private Object _preferences;
+
+    private String _vocabularyCategories;
 
 }

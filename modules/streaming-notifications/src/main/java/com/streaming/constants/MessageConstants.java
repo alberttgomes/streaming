@@ -1,4 +1,4 @@
-package com.ebook.constants;
+package com.streaming.constants;
 
 /**
  * @author Albert Gomes Cabral

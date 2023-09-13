@@ -1,6 +1,6 @@
-package com.ebook.type;
+package com.streaming.type;
 
-import com.ebook.exceptions.NotificationMessageException;
+import com.streaming.exceptions.NotificationMessageException;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
 import com.liferay.journal.model.JournalArticle;

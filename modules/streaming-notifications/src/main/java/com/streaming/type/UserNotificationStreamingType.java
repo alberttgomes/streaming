@@ -1,4 +1,4 @@
-package com.ebook.type;
+package com.streaming.type;
 
 import com.liferay.notification.context.NotificationContext;
 import com.liferay.notification.model.NotificationTemplate;

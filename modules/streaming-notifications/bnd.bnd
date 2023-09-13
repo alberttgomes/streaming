@@ -1,5 +1,4 @@
-Bundle-Name: ebook-notifications
+Bundle-Name: streaming-notifications
 Bundle-SymbolicName: com.streaming
 Bundle-Version: 1.0.0
-Export-Package: com.ebook.*
 Import-Package: *; version=1.0.0;

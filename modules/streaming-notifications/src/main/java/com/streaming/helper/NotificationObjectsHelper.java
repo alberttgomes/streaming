@@ -1,8 +1,8 @@
-package com.ebook.helper;
+package com.streaming.helper;
 
-import com.ebook.constants.MessageConstants;
-import com.ebook.constants.NotificationsEbookPortletKeys;
-import com.ebook.portlet.NotificationEbookPortlet;
+import com.streaming.constants.MessageConstants;
+import com.streaming.constants.NotificationsEbookPortletKeys;
+import com.streaming.portlet.NotificationEbookPortlet;
 import com.liferay.notification.constants.NotificationConstants;
 import com.liferay.notification.context.NotificationContext;
 import com.liferay.notification.model.NotificationQueueEntry;

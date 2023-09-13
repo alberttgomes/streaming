@@ -1,4 +1,4 @@
-package com.ebook.module;
+package com.streaming.module;
 
 import java.util.Date;
 import java.util.List;

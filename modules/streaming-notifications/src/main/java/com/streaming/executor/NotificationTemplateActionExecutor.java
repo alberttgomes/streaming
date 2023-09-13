@@ -1,7 +1,7 @@
-package com.ebook.executor;
+package com.streaming.executor;
 
-import com.ebook.exceptions.NotificationMessageException;
-import com.ebook.module.NotificationNewsStreamingModel;
+import com.streaming.exceptions.NotificationMessageException;
+import com.streaming.module.NotificationNewsStreamingModel;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.service.JournalArticleLocalService;
 import com.liferay.notification.context.NotificationContextBuilder;
@@ -10,7 +10,7 @@ import com.liferay.notification.service.NotificationTemplateLocalService;
 import com.liferay.notification.type.NotificationType;
 import com.liferay.notification.type.NotificationTypeServiceTracker;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.ebook.constants.NotificationStatus;
+import com.streaming.constants.NotificationStatus;
 import com.liferay.portal.kernel.util.*;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import org.osgi.service.component.annotations.Component;

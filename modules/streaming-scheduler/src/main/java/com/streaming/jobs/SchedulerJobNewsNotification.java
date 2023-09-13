@@ -1,4 +1,4 @@
-package com.ebook.jobs;
+package com.streaming.jobs;
 
 import com.liferay.petra.function.UnsafeRunnable;
 import com.liferay.portal.kernel.log.Log;

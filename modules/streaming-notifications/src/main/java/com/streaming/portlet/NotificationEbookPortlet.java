@@ -1,6 +1,6 @@
-package com.ebook.portlet;
+package com.streaming.portlet;
 
-import com.ebook.constants.NotificationsEbookPortletKeys;
+import com.streaming.constants.NotificationsEbookPortletKeys;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;

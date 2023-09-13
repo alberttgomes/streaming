@@ -1,7 +1,7 @@
 package com.streaming.constants;
 
 /**
- * @author me
+ * @author Albert Gomes Cabral
  */
 public class StreamingPortletKeys {
 
