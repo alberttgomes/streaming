@@ -2,7 +2,6 @@ package com.streaming.portlet;
 
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.service.JournalArticleLocalServiceUtil;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -141,10 +140,6 @@ public class StreamingPortlet extends MVCPortlet {
 							description = streamingPortletHelper.getTitleAndDescriptionByFields(
 									carouselContentModel.getFieldSet(), value[0],themeDisplay, document);
 
-							description = description.replace("<p>", StringPool.BLANK);
-
-							description = description.replace("</p>", StringPool.BLANK);
-
 							carouselContentModel.setDescription(description);
 
 							break;
@@ -185,11 +180,14 @@ public class StreamingPortlet extends MVCPortlet {
 		finally {
 
 			renderRequest.setAttribute("carouselContentModel", carouselContentModel.toString());
+			renderRequest.setAttribute("title", carouselContentModel.getTitle());
+			renderRequest.setAttribute("description", carouselContentModel.getDescription());
+			renderRequest.setAttribute("date", carouselContentModel.getDate());
+			renderRequest.setAttribute("url-file-entry", carouselContentModel.getFileEntry());
+			renderRequest.setAttribute("color", carouselContentModel.getColor());
 
 			super.doView(renderRequest, renderResponse);
 
-			_log.info("Module " +
-					StreamingPortlet.class.getName() + " initialized");
 		}
 
 	}
