@@ -1,7 +1,11 @@
 package com.streaming.helper;
 
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.messaging.Message;
 import com.streaming.constants.MessageConstants;
+import com.streaming.constants.NotificationStatus;
 import com.streaming.constants.NotificationsEbookPortletKeys;
+import com.streaming.exceptions.NotificationMessageException;
 import com.streaming.portlet.NotificationEbookPortlet;
 import com.liferay.notification.constants.NotificationConstants;
 import com.liferay.notification.context.NotificationContext;
@@ -54,7 +58,7 @@ public class NotificationObjectsHelper {
         return _notificationContext;
     }
 
-    private NotificationQueueEntry notificationQueueEntryHelper(
+    public NotificationQueueEntry notificationQueueEntryHelper(
             String body, long notificationQueueEntryId,
             String className, long classPK, String type,
             long companyId, Date createDate,
@@ -78,6 +82,29 @@ public class NotificationObjectsHelper {
         return _notificationQueueEntry;
     }
 
+    public void registerMessageListener(Message message)
+            throws NotificationMessageException {
+
+        JSONObject jsonObject = (JSONObject)message.getPayload();
+
+        long notificationId = jsonObject.getLong(
+                "notification_model_news_id");
+
+        List<String> messageList = (List<String>)
+                jsonObject.get("notification_model_news_messages");
+
+        String notificationStatus = jsonObject.getString(
+                "notification_model_news_status");
+
+        if (!notificationStatus.equals
+                (NotificationStatus.STATUS_APPROVED)) {
+            return;
+        }
+
+        message.put("notification_id", notificationId);
+        message.put("notification_message", messageList);
+        message.put("notification_status", notificationStatus);
+    }
 
     private static final NotificationContext
             _notificationContext = new NotificationContext();
