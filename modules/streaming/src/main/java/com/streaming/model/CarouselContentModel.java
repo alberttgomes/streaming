@@ -1,11 +1,9 @@
 package com.streaming.model;
 
-import java.util.Date;
-
 /**
  * @author Albert Gomes Cabral
  */
-public class BannerContentModel {
+public class CarouselContentModel {
 
     public String getColor() {
         return _color;
@@ -15,11 +13,11 @@ public class BannerContentModel {
         this._color = color;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return _date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this._date = date;
     }
 
@@ -53,7 +51,7 @@ public class BannerContentModel {
 
     private String _color;
 
-    private Date _date;
+    private String _date;
 
     private String _description;
 
@@ -62,5 +60,11 @@ public class BannerContentModel {
     private String _fileEntry;
 
     private String _title;
+
+    @Override
+    public String toString() {
+        return "{ color: '#" +  _color + "', date: '" + _date +
+                "', description: '" + _description + "', urlFileEntry: '" + _fileEntry + "', title: '" + _title + "' }";
+    }
 
 }
