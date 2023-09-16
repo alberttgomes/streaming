@@ -14,25 +14,23 @@ import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.DocumentException;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.streaming.constants.StreamingPortletKeys;
-
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
-
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-
 import com.streaming.helper.StreamingPortletHelper;
-import com.streaming.model.BannerContentModel;
+import com.streaming.model.CarouselContentModel;
 import com.streaming.model.CategoriesModel;
 import com.streaming.model.PreferencesPortletModel;
 import org.osgi.service.component.annotations.Component;
-
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
 
 /**
  * @author Albert Gomes Cabral
@@ -77,6 +75,12 @@ public class StreamingPortlet extends MVCPortlet {
 		StreamingPortletHelper streamingPortletHelper =
 				new StreamingPortletHelper();
 
+		CarouselContentModel carouselContentModel =
+				new CarouselContentModel();
+
+		Map<String, String> carouselPutJSP =
+				new LinkedHashMap<String, String>();
+
 		try {
 			PreferencesPortletModel preferencesPortletModel =
 					streamingPortletHelper.loadPreferencesModel(
@@ -114,56 +118,62 @@ public class StreamingPortlet extends MVCPortlet {
 
 				document = SAXReaderUtil.read(new StringReader(documentContent));
 
-				String color = StringPool.BLANK;
-				Date date = new Date();
-				String description = StringPool.BLANK;
-				String fieldSet = "Fieldset92342918";
-				String fileEntry = StringPool.BLANK;
-				String title = StringPool.BLANK;
-
+				String color;
+				String date;
+				String description;
+				String fileEntry;
+				String title;
 
 				for (String values : fieldsName) {
-
-					BannerContentModel bannerContentModel = new BannerContentModel();
 
 					String[] value = values.split("=");
 
 				    switch (value[0])  {
 						case "Text13771537":
 							title = streamingPortletHelper.getTitleAndDescriptionByFields(
-									bannerContentModel.getFieldSet(), value[0],themeDisplay, document);
+									carouselContentModel.getFieldSet(), value[0],themeDisplay, document);
 
-							bannerContentModel.setTitle(title);
+							carouselContentModel.setTitle(title);
 
 							break;
 
 						case "RichText53999476":
-
 							description = streamingPortletHelper.getTitleAndDescriptionByFields(
-									fieldSet, value[0],themeDisplay, document);
+									carouselContentModel.getFieldSet(), value[0],themeDisplay, document);
 
-							bannerContentModel.setDescription(description);
+							description = description.replace("<p>", StringPool.BLANK);
+
+							description = description.replace("</p>", StringPool.BLANK);
+
+							carouselContentModel.setDescription(description);
 
 							break;
 
 						case "Image87907379":
 							fileEntry = streamingPortletHelper.getTitleAndDescriptionByFields(
-									fieldSet, value[0],themeDisplay, document);
+									carouselContentModel.getFieldSet(), value[0],themeDisplay, document);
 
-							bannerContentModel.setFileEntry(fileEntry);
+							carouselContentModel.setFileEntry(fileEntry);
 
 							break;
 
 						case "Date63543359":
+							date = streamingPortletHelper.getTitleAndDescriptionByFields(
+									carouselContentModel.getFieldSet(), value[0], themeDisplay, document);
+
+							carouselContentModel.setDate(date);
+
 							break;
+
 						case "Color64500276":
 							color = streamingPortletHelper.getTitleAndDescriptionByFields(
-									fieldSet, value[0],themeDisplay, document);
+									carouselContentModel.getFieldSet(), value[0],themeDisplay, document);
+
+							carouselContentModel.setColor(color);
+
 							break;
 					}
 				}
-
-
 			}
 
 			_log.info("Load category "
@@ -173,7 +183,8 @@ public class StreamingPortlet extends MVCPortlet {
 			throw new PortletException(portletException);
 		}
 		finally {
-			renderRequest.setAttribute("news", null);
+
+			renderRequest.setAttribute("carouselContentModel", carouselContentModel.toString());
 
 			super.doView(renderRequest, renderResponse);
 

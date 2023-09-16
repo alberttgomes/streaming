@@ -29,7 +29,6 @@ import com.liferay.portal.kernel.search.generic.QueryTermImpl;
 import com.liferay.portal.kernel.search.generic.TermQueryImpl;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.xml.Node;
-import com.streaming.model.BannerContentModel;
 import com.streaming.model.CategoriesModel;
 import com.streaming.model.PreferencesPortletModel;
 
