@@ -41,29 +41,6 @@ import java.util.*;
  */
 public class StreamingPortletHelper {
 
-    public PreferencesPortletModel loadPreferencesModel(
-            long companyId, long groupId, long mvccVersion,
-            long userId, String externalReferenceCode, PortletRequest preferences)
-            throws RuntimeException {
-
-        PortletPreferences portletPreferences =
-                preferences.getPreferences();
-
-        PreferencesPortletModel preferencesPortletModel =
-                new PreferencesPortletModel();
-
-        preferencesPortletModel.setVocabularyCategories(
-                "vocabulary_streaming");
-        preferencesPortletModel.setCompanyId(companyId);
-        preferencesPortletModel.setMvccVersion(mvccVersion);
-        preferencesPortletModel.setExternalReferenceCode(externalReferenceCode);
-        preferencesPortletModel.setGroupId(groupId);
-        preferencesPortletModel.setUserId(userId);
-        preferencesPortletModel.setPreferences(preferences);
-
-        return preferencesPortletModel;
-    }
-
     public List<CategoriesModel> getCategories(String vocabularyName) {
 
         List<AssetVocabulary> vocabularies =
@@ -163,9 +140,6 @@ public class StreamingPortletHelper {
         return docs;
     }
 
-    private static TermQueryImpl _buildTermQuery(String field, String value){
-        return new TermQueryImpl(new QueryTermImpl(field, value));
-    }
 
     public Set<String> getFieldsByStructure(JournalArticle journalArticle)
             throws PortalException {
@@ -182,7 +156,7 @@ public class StreamingPortletHelper {
         return fields;
     }
 
-    public String getTitleAndDescriptionByFields(
+    public String getFields(
             String fieldGroup, String field, ThemeDisplay themeDisplay, Document document)
             throws PortalException, JsonProcessingException {
 
@@ -223,6 +197,33 @@ public class StreamingPortletHelper {
         }
 
         return fieldResult;
+    }
+
+    public PreferencesPortletModel setPreferencesModel(
+            long companyId, long groupId, long mvccVersion,
+            long userId, String externalReferenceCode, PortletRequest preferences)
+            throws RuntimeException {
+
+        PortletPreferences portletPreferences =
+                preferences.getPreferences();
+
+        PreferencesPortletModel preferencesPortletModel =
+                new PreferencesPortletModel();
+
+        preferencesPortletModel.setVocabularyCategories(
+                "vocabulary_streaming");
+        preferencesPortletModel.setCompanyId(companyId);
+        preferencesPortletModel.setMvccVersion(mvccVersion);
+        preferencesPortletModel.setExternalReferenceCode(externalReferenceCode);
+        preferencesPortletModel.setGroupId(groupId);
+        preferencesPortletModel.setUserId(userId);
+        preferencesPortletModel.setPreferences(preferences);
+
+        return preferencesPortletModel;
+    }
+
+    private static TermQueryImpl _buildTermQuery(String field, String value){
+        return new TermQueryImpl(new QueryTermImpl(field, value));
     }
 
     private SearchContext _getSearchContext(

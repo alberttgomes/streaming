@@ -82,7 +82,7 @@ public class StreamingPortlet extends MVCPortlet {
 
 		try {
 			PreferencesPortletModel preferencesPortletModel =
-					streamingPortletHelper.loadPreferencesModel(
+					streamingPortletHelper.setPreferencesModel(
 							companyId, groupId, mvccVersion, contact.getUserId(),
 							externalReferenceCode, renderRequest);
 
@@ -125,11 +125,11 @@ public class StreamingPortlet extends MVCPortlet {
 
 				for (String values : fieldsName) {
 
-					String[] value = values.split("=");
+					String[] value = values.split("\\=");
 
 				    switch (value[0])  {
 						case "Text13771537":
-							title = streamingPortletHelper.getTitleAndDescriptionByFields(
+							title = streamingPortletHelper.getFields(
 									carouselContentModel.getFieldSet(), value[0],themeDisplay, document);
 
 							carouselContentModel.setTitle(title);
@@ -137,7 +137,7 @@ public class StreamingPortlet extends MVCPortlet {
 							break;
 
 						case "RichText53999476":
-							description = streamingPortletHelper.getTitleAndDescriptionByFields(
+							description = streamingPortletHelper.getFields(
 									carouselContentModel.getFieldSet(), value[0],themeDisplay, document);
 
 							carouselContentModel.setDescription(description);
@@ -145,7 +145,7 @@ public class StreamingPortlet extends MVCPortlet {
 							break;
 
 						case "Image87907379":
-							fileEntry = streamingPortletHelper.getTitleAndDescriptionByFields(
+							fileEntry = streamingPortletHelper.getFields(
 									carouselContentModel.getFieldSet(), value[0],themeDisplay, document);
 
 							carouselContentModel.setFileEntry(fileEntry);
@@ -153,7 +153,7 @@ public class StreamingPortlet extends MVCPortlet {
 							break;
 
 						case "Date63543359":
-							date = streamingPortletHelper.getTitleAndDescriptionByFields(
+							date = streamingPortletHelper.getFields(
 									carouselContentModel.getFieldSet(), value[0], themeDisplay, document);
 
 							carouselContentModel.setDate(date);
@@ -161,7 +161,7 @@ public class StreamingPortlet extends MVCPortlet {
 							break;
 
 						case "Color64500276":
-							color = streamingPortletHelper.getTitleAndDescriptionByFields(
+							color = streamingPortletHelper.getFields(
 									carouselContentModel.getFieldSet(), value[0],themeDisplay, document);
 
 							carouselContentModel.setColor(color);
