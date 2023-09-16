@@ -1,5 +1,7 @@
 package com.streaming.executor;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.streaming.exceptions.NotificationMessageException;
 import com.streaming.model.NotificationNewsStreamingModel;
 import com.liferay.journal.model.JournalArticle;
@@ -10,9 +12,10 @@ import com.liferay.notification.service.NotificationTemplateLocalService;
 import com.liferay.notification.type.NotificationType;
 import com.liferay.notification.type.NotificationTypeServiceTracker;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.streaming.constants.NotificationStatus;
+import com.streaming.constants.NotificationStatusAndTypesConstants;
 import com.liferay.portal.kernel.util.*;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.streaming.portlet.NotificationEbookPortlet;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -95,7 +98,7 @@ public class NotificationTemplateActionExecutor implements NotificationActionExe
                             articleField.getResourcePrimKey());
 
             if (notificationNewsStreamingModel.getStatusNotification()
-                    .equals(NotificationStatus.STATUS_APPROVED)) {
+                    .equals(NotificationStatusAndTypesConstants.STATUS_APPROVED)) {
                 termValues.put(articleField.getTitle(),
                         notificationNewsStreamingModel.getClass());
             }
@@ -135,13 +138,21 @@ public class NotificationTemplateActionExecutor implements NotificationActionExe
     private NotificationNewsStreamingModel _fetchNotificationNewsEbookModel(
             long notificationNewsEbookId) throws NotificationMessageException {
 
+        if (notificationNewsEbookId < 0) {
+            if(_log.isWarnEnabled()) {
+                _log.warn(
+                        "notificationNewsEbookId is invalid");
+            }
+            else {
+                throw new NotificationMessageException(
+                        "notificationNewsEbookId is invalid");
+            }
+
+            return null;
+        }
+
         NotificationNewsStreamingModel notificationNewsStreamingModel
                 = new NotificationNewsStreamingModel();
-
-        if (notificationNewsEbookId < 0) {
-            throw new NotificationMessageException(
-                    "notificationNewsEbookId is invalid");
-        }
 
         notificationNewsStreamingModel
                 .getNotificationNewsStreamingId(notificationNewsEbookId);
@@ -151,8 +162,11 @@ public class NotificationTemplateActionExecutor implements NotificationActionExe
 
     @Override
     public String getKey() {
-        return NotificationStatus.KEY_NOTIFICATION;
+        return NotificationStatusAndTypesConstants.KEY_NOTIFICATION;
     }
+
+    private static final Log _log =
+            LogFactoryUtil.getLog(NotificationTemplateActionExecutor.class);
 
     @Reference
     private JournalArticleLocalService _journalArticleLocalServiceUtil;

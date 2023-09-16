@@ -8,10 +8,8 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.scheduler.*;
 import com.liferay.portal.kernel.scheduler.SchedulerEngineHelperUtil;
 import com.liferay.portal.kernel.util.Validator;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ConfigurationPolicy;
-import org.osgi.service.component.annotations.Reference;
+import com.streaming.model.NotificationNewsStreamingModel;
+import org.osgi.service.component.annotations.*;
 
 import java.util.*;
 
@@ -19,25 +17,40 @@ import java.util.*;
  * @author Albert Gomes Cabral
  */
 @Component(
+        immediate = true,
         configurationPolicy = ConfigurationPolicy.OPTIONAL,
         service = SchedulerJobNewsNotification.class
 )
 public class SchedulerJobNewsNotification implements SchedulerJobConfiguration {
 
     @Activate
-    public void active() throws Throwable {};
+    public void active(Map<String, Object> properties) throws Throwable {};
+
+    @Deactivate
+    public void deactivate() throws Throwable {
+        try {
+            SchedulerEngineHelperUtil.unschedule(_trigger.getJobName(),
+                    _trigger.getGroupName(), StorageType.MEMORY_CLUSTERED);
+        }
+        catch (SchedulerException schedulerException) {
+            throw new SchedulerException(
+                    "Unable to un scheduler job ",
+                    schedulerException);
+        }
+    }
 
     @Override
     public UnsafeRunnable<Exception> getJobExecutorUnsafeRunnable() {
         return () -> {
-            try {
-                SchedulerEngineHelperUtil.unschedule(_trigger.getJobName(),
-                        _trigger.getGroupName(), StorageType.MEMORY_CLUSTERED);
-            }
-            catch (SchedulerException schedulerException) {
-                throw new SchedulerException(
-                        "Unable to un scheduler job ",
-                        schedulerException);
+            NotificationNewsStreamingModel notificationNewsStreamingModel =
+                    new NotificationNewsStreamingModel();
+
+            long newsId = notificationNewsStreamingModel.getNewsId();
+
+            if (newsId < 0) {
+                throw new Exception(
+                        "NotificationNewsStreamingModel's " +
+                                "newsId is invalid");
             }
         };
     }
@@ -67,7 +80,7 @@ public class SchedulerJobNewsNotification implements SchedulerJobConfiguration {
         }
 
         return TriggerConfiguration.createTriggerConfiguration(
-                3, TimeUnit.HOUR);
+                3, TimeUnit.MINUTE);
     }
 
     private static final String

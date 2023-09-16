@@ -3,7 +3,7 @@ package com.streaming.constants;
 /**
  * @author Albert Gomes Cabral
  */
-public class NotificationStatus {
+public class NotificationStatusAndTypesConstants {
 
     public static final String STATUS_APPROVED = "approved";
 

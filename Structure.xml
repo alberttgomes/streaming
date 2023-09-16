@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root available-locales="en_US" default-locale="en_US" version="1.0">
+   <dynamic-element field-reference="fieldGroup" index-type="" instance-id="0IMVKiD5" name="Fieldset92342918" type="fieldset">
+      <dynamic-element field-reference="title" index-type="keyword" instance-id="Grac0axm" name="Text13771537" type="text">
+         <dynamic-content language-id="en_US"><![CDATA[Batman Begins]]></dynamic-content>
+      </dynamic-element>
+      <dynamic-element field-reference="description" index-type="text" instance-id="Gx66CeNa" name="RichText53999476" type="rich_text">
+         <dynamic-content language-id="en_US"><![CDATA[<p>Batman Begins is a 2005 superhero film directed by Christopher Nolan and written by Nolan and David S. Goyer. Based on the DC Comics character Batman, it stars Christian Bale as Bruce Wayne / Batman, with Michael Caine, Liam Neeson, Katie Holmes, Gary Oldman, Cillian Murphy, Tom Wilkinson, Rutger Hauer, Ken Watanabe, and Morgan Freeman in supporting roles. The film reboots the Batman film series, telling the origin story of Bruce Wayne from the death of his parents to his journey to become Batman and his fight to stop Ra's al Ghul and the Scarecrow from plunging Gotham City into chaos.</p>]]></dynamic-content>
+      </dynamic-element>
+      <dynamic-element field-reference="date" index-type="keyword" instance-id="QXDgjCI2" name="Date63543359" type="date">
+         <dynamic-content language-id="en_US"><![CDATA[2023-09-19]]></dynamic-content>
+      </dynamic-element>
+      <dynamic-element field-reference="image" index-type="text" instance-id="tzqNnH5Z" name="Image87907379" type="image">
+         <dynamic-content language-id="en_US"><![CDATA[{"groupId":"20119","alt":"","name":"batman_begins_banner.jpeg","width":"992","description":"","title":"batman_begins_banner","type":"document","uuid":"65203d6c-2683-414b-3475-3847a0900e4c","fileEntryId":"35017","resourcePrimKey":"35151","url":"/documents/d/guest/batman_begins_banner","height":"496"}]]></dynamic-content>
+      </dynamic-element>
+      <dynamic-element field-reference="colorTheme" index-type="keyword" instance-id="9ldSHJkq" name="Color64500276" type="color">
+         <dynamic-content language-id="en_US"><![CDATA[000000]]></dynamic-content>
+      </dynamic-element>
+      <dynamic-element field-reference="link" index-type="keyword" instance-id="MQC2t43E" name="LinkToLayout35470478" type="link_to_layout">
+         <dynamic-content language-id="en_US"><![CDATA[{"groupId":"20119","name":"Pages > News","id":"31b4a2a6-1d1a-08f1-4d4b-d3bd3a898ea4","privateLayout":false,"title":"News","layoutId":"4","value":"31b4a2a6-1d1a-08f1-4d4b-d3bd3a898ea4","returnType":"com.liferay.item.selector.criteria.UUIDItemSelectorReturnType"}]]></dynamic-content>
+      </dynamic-element>
+   </dynamic-element>
+</root>

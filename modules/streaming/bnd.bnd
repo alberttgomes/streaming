@@ -1,4 +1,4 @@
 Bundle-Name: streaming
-Bundle-SymbolicName: com.streaming
+Bundle-SymbolicName: com.streaming.portlet
 Bundle-Version: 1.0.0
 Export-Package: com.streaming.constants

@@ -3,7 +3,7 @@ package com.streaming.helper;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.messaging.Message;
 import com.streaming.constants.MessageConstants;
-import com.streaming.constants.NotificationStatus;
+import com.streaming.constants.NotificationStatusAndTypesConstants;
 import com.streaming.constants.NotificationsEbookPortletKeys;
 import com.streaming.exceptions.NotificationMessageException;
 import com.streaming.portlet.NotificationEbookPortlet;
@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * @author Albert Gomes Cabral
  */
-public class NotificationObjectsHelper {
+public class NotificationHelper {
 
     public NotificationContext notificationContextHelper(
             List<Long> attachmentObjectFieldIds, long classPK,
@@ -97,7 +97,7 @@ public class NotificationObjectsHelper {
                 "notification_model_news_status");
 
         if (!notificationStatus.equals
-                (NotificationStatus.STATUS_APPROVED)) {
+                (NotificationStatusAndTypesConstants.STATUS_APPROVED)) {
             return;
         }
 

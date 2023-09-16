@@ -1,11 +1,18 @@
 package com.streaming.portlet;
 
+import com.liferay.journal.model.JournalArticle;
+import com.liferay.journal.service.JournalArticleLocalServiceUtil;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Contact;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.xml.Document;
+import com.liferay.portal.kernel.xml.DocumentException;
+import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.streaming.constants.StreamingPortletKeys;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
@@ -16,12 +23,16 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import com.streaming.helper.StreamingPortletHelper;
+import com.streaming.model.BannerContentModel;
 import com.streaming.model.CategoriesModel;
 import com.streaming.model.PreferencesPortletModel;
 import org.osgi.service.component.annotations.Component;
 
 import java.io.IOException;
+import java.io.StringReader;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Albert Gomes Cabral
@@ -67,19 +78,98 @@ public class StreamingPortlet extends MVCPortlet {
 				new StreamingPortletHelper();
 
 		try {
-
-			PreferencesPortletModel notificationNewsStreamingModel =
+			PreferencesPortletModel preferencesPortletModel =
 					streamingPortletHelper.loadPreferencesModel(
 							companyId, groupId, mvccVersion, contact.getUserId(),
 							externalReferenceCode, renderRequest);
 
 			List<CategoriesModel> categoriesModel = streamingPortletHelper.getCategories(
-					notificationNewsStreamingModel.getVocabularyCategories());
+					preferencesPortletModel.getVocabularyCategories());
+
+			if (categoriesModel == null) {
+				_log.error(
+						"category model is null \n" +
+						"This category object is necessary to found the articles");
+
+				return;
+			}
+
+			List<com.liferay.portal.kernel.search.Document> documents =
+					streamingPortletHelper.getDocumentsByCategory(themeDisplay, -1, -1,
+							categoriesModel.get(0).getCategoryId());
+
+			for (com.liferay.portal.kernel.search.Document doc  : documents) {
+				String articleId = doc.get("articleId");
+
+				JournalArticle journalArticle =
+						JournalArticleLocalServiceUtil.getLatestArticle(groupId, articleId);
+
+				Set<String> fieldsName =
+						streamingPortletHelper.getFieldsByStructure(journalArticle);
+
+				String documentContent = journalArticle.getContentByLocale(
+						themeDisplay.getLanguageId());
+
+				Document document = null;
+
+				document = SAXReaderUtil.read(new StringReader(documentContent));
+
+				String color = StringPool.BLANK;
+				Date date = new Date();
+				String description = StringPool.BLANK;
+				String fieldSet = "Fieldset92342918";
+				String fileEntry = StringPool.BLANK;
+				String title = StringPool.BLANK;
+
+
+				for (String values : fieldsName) {
+
+					BannerContentModel bannerContentModel = new BannerContentModel();
+
+					String[] value = values.split("=");
+
+				    switch (value[0])  {
+						case "Text13771537":
+							title = streamingPortletHelper.getTitleAndDescriptionByFields(
+									bannerContentModel.getFieldSet(), value[0],themeDisplay, document);
+
+							bannerContentModel.setTitle(title);
+
+							break;
+
+						case "RichText53999476":
+
+							description = streamingPortletHelper.getTitleAndDescriptionByFields(
+									fieldSet, value[0],themeDisplay, document);
+
+							bannerContentModel.setDescription(description);
+
+							break;
+
+						case "Image87907379":
+							fileEntry = streamingPortletHelper.getTitleAndDescriptionByFields(
+									fieldSet, value[0],themeDisplay, document);
+
+							bannerContentModel.setFileEntry(fileEntry);
+
+							break;
+
+						case "Date63543359":
+							break;
+						case "Color64500276":
+							color = streamingPortletHelper.getTitleAndDescriptionByFields(
+									fieldSet, value[0],themeDisplay, document);
+							break;
+					}
+				}
+
+
+			}
 
 			_log.info("Load category "
 					+ categoriesModel.get(0).getCategoryName() + " completed");
 		}
-		catch (RuntimeException portletException) {
+		catch (PortalException | DocumentException portletException) {
 			throw new PortletException(portletException);
 		}
 		finally {
