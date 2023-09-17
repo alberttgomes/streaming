@@ -126,8 +126,6 @@ public class StreamingPortletHelper {
             Hits hits = facetedSearcher.search(searchContext);
 
             if (hits.getLength() > start) {
-                _log.info("Returning hits...");
-
                 docs = hits.toList();
             }
         }
