@@ -25,10 +25,7 @@ import com.streaming.model.PreferencesPortletModel;
 import org.osgi.service.component.annotations.Component;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -77,9 +74,6 @@ public class StreamingPortlet extends MVCPortlet {
 		CarouselContentModel carouselContentModel =
 				new CarouselContentModel();
 
-		Map<String, String> carouselPutJSP =
-				new LinkedHashMap<String, String>();
-
 		try {
 			PreferencesPortletModel preferencesPortletModel =
 					streamingPortletHelper.setPreferencesModel(
@@ -101,7 +95,12 @@ public class StreamingPortlet extends MVCPortlet {
 					streamingPortletHelper.getDocumentsByCategory(themeDisplay, -1, -1,
 							categoriesModel.get(0).getCategoryId());
 
+			int count = 0;
+
 			for (com.liferay.portal.kernel.search.Document doc  : documents) {
+
+				count++;
+
 				String articleId = doc.get("articleId");
 
 				JournalArticle journalArticle =
@@ -116,6 +115,8 @@ public class StreamingPortlet extends MVCPortlet {
 				Document document = null;
 
 				document = SAXReaderUtil.read(new StringReader(documentContent));
+
+				Map<String, String> map = new HashMap<>();
 
 				String color;
 				String date;
@@ -134,6 +135,8 @@ public class StreamingPortlet extends MVCPortlet {
 
 							carouselContentModel.setTitle(title);
 
+							map.put(value[0], title);
+
 							break;
 
 						case "RichText53999476":
@@ -141,6 +144,8 @@ public class StreamingPortlet extends MVCPortlet {
 									carouselContentModel.getFieldSet(), value[0],themeDisplay, document);
 
 							carouselContentModel.setDescription(description);
+
+							map.put(value[0], description);
 
 							break;
 
@@ -150,6 +155,8 @@ public class StreamingPortlet extends MVCPortlet {
 
 							carouselContentModel.setFileEntry(fileEntry);
 
+							map.put(value[0], fileEntry);
+
 							break;
 
 						case "Date63543359":
@@ -157,6 +164,8 @@ public class StreamingPortlet extends MVCPortlet {
 									carouselContentModel.getFieldSet(), value[0], themeDisplay, document);
 
 							carouselContentModel.setDate(date);
+
+							map.put(value[0], date);
 
 							break;
 
@@ -166,31 +175,35 @@ public class StreamingPortlet extends MVCPortlet {
 
 							carouselContentModel.setColor(color);
 
+							map.put(value[0], color);
+
 							break;
 					}
 				}
-			}
 
-			_log.info("Load category "
-					+ categoriesModel.get(0).getCategoryName() + " completed");
+				carouselJPSProvider.put("field_" + count, map);
+
+			}
 		}
 		catch (PortalException | DocumentException portletException) {
 			throw new PortletException(portletException);
 		}
 		finally {
 
-			renderRequest.setAttribute("carouselContentModel", carouselContentModel.toString());
-			renderRequest.setAttribute("title", carouselContentModel.getTitle());
-			renderRequest.setAttribute("description", carouselContentModel.getDescription());
-			renderRequest.setAttribute("date", carouselContentModel.getDate());
-			renderRequest.setAttribute("url-file-entry", carouselContentModel.getFileEntry());
-			renderRequest.setAttribute("color", carouselContentModel.getColor());
+			renderRequest.setAttribute("carouselData", getCarouselDataPortlet());
 
 			super.doView(renderRequest, renderResponse);
 
 		}
 
 	}
+
+	public Object getCarouselDataPortlet() {
+		return carouselJPSProvider.isEmpty() ?  new CarouselContentModel() : carouselJPSProvider;
+	}
+
+	private final Map<String, Object> carouselJPSProvider =
+			new LinkedHashMap<String, Object>();
 
 	private static final Log _log =
 			LogFactoryUtil.getLog(StreamingPortlet.class);
