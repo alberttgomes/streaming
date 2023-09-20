@@ -14,8 +14,6 @@ import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.search.*;
@@ -237,8 +235,5 @@ public class StreamingPortletHelper {
 
         return searchContext;
     }
-
-    private static final Log _log =
-            LogFactoryUtil.getLog(StreamingPortletHelper.class);
 
 }
