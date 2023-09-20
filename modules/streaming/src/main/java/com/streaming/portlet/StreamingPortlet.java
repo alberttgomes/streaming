@@ -1,5 +1,6 @@
 package com.streaming.portlet;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.service.JournalArticleLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -180,29 +181,29 @@ public class StreamingPortlet extends MVCPortlet {
 							break;
 					}
 				}
-
-				carouselJPSProvider.put("field_" + count, map);
-
+				carouselRender.put("field_" + count, map);
 			}
 		}
 		catch (PortalException | DocumentException portletException) {
 			throw new PortletException(portletException);
 		}
 		finally {
+			ObjectMapper mapper = new ObjectMapper();
 
-			renderRequest.setAttribute("carouselData", getCarouselDataPortlet());
+			String jsonParser = mapper.writeValueAsString(getCarouselDataPortlet());
+
+			renderRequest.setAttribute("carouselData", jsonParser.trim());
 
 			super.doView(renderRequest, renderResponse);
-
 		}
 
 	}
 
 	public Object getCarouselDataPortlet() {
-		return carouselJPSProvider.isEmpty() ?  new CarouselContentModel() : carouselJPSProvider;
+		return carouselRender.isEmpty() ? new CarouselContentModel() : carouselRender.values();
 	}
 
-	private final Map<String, Object> carouselJPSProvider =
+	private final Map<String, Object> carouselRender =
 			new LinkedHashMap<String, Object>();
 
 	private static final Log _log =
