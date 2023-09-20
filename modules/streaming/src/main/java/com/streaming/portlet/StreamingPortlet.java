@@ -200,7 +200,8 @@ public class StreamingPortlet extends MVCPortlet {
 	}
 
 	public Object getCarouselDataPortlet() {
-		return carouselRender.isEmpty() ? new CarouselContentModel() : carouselRender.values();
+		return carouselRender.isEmpty() ?
+				new CarouselContentModel().toString() : carouselRender.values();
 	}
 
 	private final Map<String, Object> carouselRender =

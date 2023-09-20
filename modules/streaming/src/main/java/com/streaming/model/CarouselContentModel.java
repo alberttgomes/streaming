@@ -63,8 +63,8 @@ public class CarouselContentModel {
 
     @Override
     public String toString() {
-        return "{ color: '#" +  _color + "', date: '" + _date +
-                "', description: '" + _description + "', urlFileEntry: '" + _fileEntry + "', title: '" + _title + "' }";
+        return "{color: '#" +  _color + "', date: '" + _date +
+                "', description: '" + _description + "', urlFileEntry: '" + _fileEntry + "', title: '" + _title + "'}";
     }
 
 }
