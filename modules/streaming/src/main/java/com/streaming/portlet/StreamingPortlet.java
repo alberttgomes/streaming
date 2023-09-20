@@ -43,7 +43,8 @@ import java.util.*;
 		"javax.portlet.init-param.view-template=/view.jsp",
 		"javax.portlet.name=" + StreamingPortletKeys.STREAMING,
 		"javax.portlet.resource-bundle=content.Language",
-		"javax.portlet.security-role-ref=power-user,user"
+		"javax.portlet.security-role-ref=power-user,user",
+		"vocabulary.categories=vocabulary_streaming"
 	},
 	service = Portlet.class
 )

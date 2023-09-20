@@ -1,9 +1,5 @@
 package com.streaming.service;
 
-import com.liferay.notification.context.NotificationContext;
-import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.util.UnicodeProperties;
-import com.streaming.model.CarouselContentModel;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -12,13 +8,6 @@ import org.osgi.annotation.versioning.ProviderType;
 @ProviderType
 public interface StreamingService {
 
-    public CarouselContentModel getCarouselContentModel();
+    public Object getPortletContent();
 
-    public void sendMessageNotification(
-            long companyId, JSONObject payload, UnicodeProperties unicodeProperties,
-            NotificationContext notificationContext, long userId);
-
-    public boolean isEnableRuleToSendNotification(JSONObject payload);
-
-    public void activeSchedulerJobSendNotification();
 }
