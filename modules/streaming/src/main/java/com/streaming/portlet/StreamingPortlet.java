@@ -1,5 +1,6 @@
 package com.streaming.portlet;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.service.JournalArticleLocalServiceUtil;
@@ -147,7 +148,7 @@ public class StreamingPortlet extends MVCPortlet {
 
 							carouselContentModel.setDescription(description);
 
-							map.put(value[0], description);
+							map.put("rich-text", description);
 
 							break;
 
@@ -157,7 +158,7 @@ public class StreamingPortlet extends MVCPortlet {
 
 							carouselContentModel.setFileEntry(fileEntry);
 
-							map.put(value[0], fileEntry);
+							map.put("image", fileEntry);
 
 							break;
 
@@ -167,7 +168,7 @@ public class StreamingPortlet extends MVCPortlet {
 
 							carouselContentModel.setDate(date);
 
-							map.put(value[0], date);
+							map.put("date", date);
 
 							break;
 
@@ -177,7 +178,7 @@ public class StreamingPortlet extends MVCPortlet {
 
 							carouselContentModel.setColor(color);
 
-							map.put(value[0], color);
+							map.put("color", color);
 
 							break;
 					}
@@ -185,24 +186,26 @@ public class StreamingPortlet extends MVCPortlet {
 				carouselRender.put("field_" + count, map);
 			}
 		}
-		catch (PortalException | DocumentException portletException) {
-			throw new PortletException(portletException);
+		catch (PortalException | DocumentException exception) {
+			throw new PortletException(exception);
 		}
 		finally {
-			ObjectMapper mapper = new ObjectMapper();
-
-			String jsonParser = mapper.writeValueAsString(getCarouselDataPortlet());
-
-			renderRequest.setAttribute("carouselData", jsonParser.trim());
+			renderRequest.setAttribute("carouselData", getCarouselDataPortlet());
 
 			super.doView(renderRequest, renderResponse);
 		}
 
 	}
 
-	public Object getCarouselDataPortlet() {
-		return carouselRender.isEmpty() ?
-				new CarouselContentModel().toString() : carouselRender.values();
+	public Object getCarouselDataPortlet()
+			throws JsonProcessingException {
+
+		ObjectMapper mapper = new ObjectMapper();
+
+		String jsonParser = mapper.writeValueAsString(carouselRender.values());
+
+		return jsonParser.isEmpty() ?
+				new CarouselContentModel().toString() : jsonParser.trim();
 	}
 
 	private final Map<String, Object> carouselRender =

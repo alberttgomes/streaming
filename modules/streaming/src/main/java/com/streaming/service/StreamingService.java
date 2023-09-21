@@ -1,5 +1,6 @@
 package com.streaming.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -8,6 +9,6 @@ import org.osgi.annotation.versioning.ProviderType;
 @ProviderType
 public interface StreamingService {
 
-    public Object getPortletContent();
+    public Object getPortletContent() throws JsonProcessingException;
 
 }

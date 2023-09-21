@@ -1,5 +1,6 @@
 package com.streaming.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.streaming.portlet.StreamingPortlet;
 import com.streaming.service.StreamingService;
 import org.osgi.service.component.annotations.Component;
@@ -12,7 +13,9 @@ import org.osgi.service.component.annotations.Reference;
 public class StreamingServiceImpl implements StreamingService {
 
     @Override
-    public Object getPortletContent() {
+    public Object getPortletContent()
+            throws JsonProcessingException {
+
         return _streamingPortlet.getCarouselDataPortlet();
     }
 
