@@ -1,11 +1,8 @@
 FROM mysql:latest
 
-
-# COPY --chown=mysql:mysql /dump/ ./var/mysql/backup
-# COPY --chown=mysql:mysql /scripts ./docker-entrypoint
+COPY --chown=mysql:root ./dump/ ./var/mysql/backup
+COPY --chown=mysql:root ./scripts/setup_database.sh ./docker-entrypoint/setup_database.sh
 
 ENV MYSQL_ROOT_PASSWORD=test
 
 EXPOSE 3306 3307
-
-# ENTRYPOINT [ "./docker-entrypoint/scripts/setup_database.sh" ]
