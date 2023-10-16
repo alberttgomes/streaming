@@ -20,6 +20,8 @@ import javax.portlet.Portlet;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+
+import com.streaming.constants.VocabularyCategoriesConstant;
 import com.streaming.helper.StreamingPortletHelper;
 import com.streaming.model.CarouselContentModel;
 import com.streaming.model.CategoriesModel;
@@ -81,6 +83,7 @@ public class StreamingPortlet extends MVCPortlet {
 			PreferencesPortletModel preferencesPortletModel =
 					streamingPortletHelper.setPreferencesModel(
 							companyId, groupId, mvccVersion, contact.getUserId(),
+							VocabularyCategoriesConstant.VOCABULARY_STREAMING_NAME,
 							externalReferenceCode, renderRequest);
 
 			List<CategoriesModel> categoriesModel = streamingPortletHelper.getCategories(
@@ -197,8 +200,7 @@ public class StreamingPortlet extends MVCPortlet {
 
 	}
 
-	public Object getCarouselDataPortlet()
-			throws JsonProcessingException {
+	public Object getCarouselDataPortlet() throws JsonProcessingException {
 
 		ObjectMapper mapper = new ObjectMapper();
 
