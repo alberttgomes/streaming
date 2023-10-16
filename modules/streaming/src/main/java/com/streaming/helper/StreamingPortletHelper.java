@@ -9,7 +9,7 @@ import com.liferay.asset.kernel.service.AssetVocabularyLocalServiceUtil;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.service.DLAppServiceUtil;
 import com.liferay.document.library.kernel.service.DLFileEntryServiceUtil;
-import com.liferay.document.library.kernel.util.DLUtil;
+import com.liferay.document.library.util.DLURLHelper;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.petra.string.StringPool;
@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.xml.Node;
 import com.streaming.model.CategoriesModel;
 import com.streaming.model.PreferencesPortletModel;
+import org.osgi.service.component.annotations.Reference;
 
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
@@ -95,8 +96,8 @@ public class StreamingPortletHelper {
         return categoryList;
     }
 
-    public List<com.liferay.portal.kernel.search.Document> getDocumentsByCategory
-            (ThemeDisplay themeDisplay, int start, int end, long categoryId) throws RuntimeException {
+    public List<com.liferay.portal.kernel.search.Document> getDocumentsByCategory(
+            ThemeDisplay themeDisplay, int start, int end, long categoryId) throws RuntimeException {
 
         List<com.liferay.portal.kernel.search.Document> docs = null;
 
@@ -154,7 +155,7 @@ public class StreamingPortletHelper {
 
     public String getFields(
             String fieldGroup, String field, ThemeDisplay themeDisplay, Document document)
-            throws PortalException, JsonProcessingException {
+                throws PortalException, JsonProcessingException {
 
         String xPathFieldGroup =
                 "/root/dynamic-element[@name='" + fieldGroup + "']";
@@ -187,8 +188,9 @@ public class StreamingPortletHelper {
 
                 FileVersion fileVersion = fileEntry.getFileVersion();
 
-                fieldResult = DLUtil.getPreviewURL(
+                fieldResult = _dlurlHelper.getPreviewURL(
                         fileEntry, fileVersion, themeDisplay, StringPool.BLANK);
+
             }
         }
 
@@ -196,9 +198,9 @@ public class StreamingPortletHelper {
     }
 
     public PreferencesPortletModel setPreferencesModel(
-            long companyId, long groupId, long mvccVersion,
-            long userId, String externalReferenceCode, PortletRequest preferences)
-            throws RuntimeException {
+            long companyId, long groupId, long mvccVersion, long userId,
+            String VocabularyCategory, String externalReferenceCode, PortletRequest preferences)
+                throws RuntimeException {
 
         PortletPreferences portletPreferences =
                 preferences.getPreferences();
@@ -206,14 +208,13 @@ public class StreamingPortletHelper {
         PreferencesPortletModel preferencesPortletModel =
                 new PreferencesPortletModel();
 
-        preferencesPortletModel.setVocabularyCategories(
-                "vocabulary_streaming");
+        preferencesPortletModel.setVocabularyCategories(VocabularyCategory);
         preferencesPortletModel.setCompanyId(companyId);
         preferencesPortletModel.setMvccVersion(mvccVersion);
         preferencesPortletModel.setExternalReferenceCode(externalReferenceCode);
         preferencesPortletModel.setGroupId(groupId);
         preferencesPortletModel.setUserId(userId);
-        preferencesPortletModel.setPreferences(preferences);
+        preferencesPortletModel.setPreferences(portletPreferences);
 
         return preferencesPortletModel;
     }
@@ -235,5 +236,8 @@ public class StreamingPortletHelper {
 
         return searchContext;
     }
+
+    @Reference
+    private DLURLHelper _dlurlHelper;
 
 }

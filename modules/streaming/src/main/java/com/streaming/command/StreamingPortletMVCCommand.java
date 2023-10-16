@@ -1,5 +1,8 @@
 package com.streaming.command;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.streaming.service.StreamingService;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -17,13 +20,18 @@ import java.time.Instant;
 public class StreamingPortletMVCCommand {
 
     @Activate
-    public void activePortletMVCommand() {
+    public void activePortletMVCommand()
+            throws JsonProcessingException {
+
         Instant instant = Instant.now();
 
-        System.out.println(
+        _log.info(
                 instant + "\\s" +
                 _streamingService.getPortletContent());
     }
+
+    private static final Log _log =
+            LogFactoryUtil.getLog(StreamingPortletMVCCommand.class);
 
     @Reference
     private StreamingService _streamingService;
