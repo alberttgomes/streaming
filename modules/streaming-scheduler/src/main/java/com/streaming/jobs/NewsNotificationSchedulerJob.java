@@ -3,15 +3,9 @@ package com.streaming.jobs;
 import com.liferay.petra.function.UnsafeRunnable;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.DestinationNames;
-import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.scheduler.*;
-import com.liferay.portal.kernel.scheduler.SchedulerEngineHelperUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.streaming.model.NotificationNewsStreamingModel;
 import org.osgi.service.component.annotations.*;
-
-import java.util.*;
 
 /**
  * @author Albert Gomes Cabral
@@ -19,12 +13,12 @@ import java.util.*;
 @Component(
         immediate = true,
         configurationPolicy = ConfigurationPolicy.OPTIONAL,
-        service = SchedulerJobNewsNotification.class
+        service = NewsNotificationSchedulerJob.class
 )
-public class SchedulerJobNewsNotification implements SchedulerJobConfiguration {
+public class NewsNotificationSchedulerJob implements SchedulerJobConfiguration {
     @Override
     public String getName() {
-        return SchedulerJobNewsNotification.class.getName();
+        return NewsNotificationSchedulerJob.class.getName();
     }
 
     @Override
@@ -46,6 +40,6 @@ public class SchedulerJobNewsNotification implements SchedulerJobConfiguration {
 
     private static final String _cronExpression = "0 */2 * ? * *";
 
-    private static final Log _log = LogFactoryUtil.getLog(SchedulerJobNewsNotification.class);
+    private static final Log _log = LogFactoryUtil.getLog(NewsNotificationSchedulerJob.class);
 
 }

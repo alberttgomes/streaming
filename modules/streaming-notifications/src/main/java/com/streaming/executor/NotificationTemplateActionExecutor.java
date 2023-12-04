@@ -12,10 +12,9 @@ import com.liferay.notification.service.NotificationTemplateLocalService;
 import com.liferay.notification.type.NotificationType;
 import com.liferay.notification.type.NotificationTypeServiceTracker;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.streaming.constants.NotificationStatusAndTypesConstants;
+import com.streaming.constants.NotificationConstants;
 import com.liferay.portal.kernel.util.*;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.streaming.portlet.NotificationEbookPortlet;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -26,7 +25,6 @@ import java.util.Map;
  */
 @Component(service = NotificationTemplateActionExecutor.class)
 public class NotificationTemplateActionExecutor implements NotificationActionExecutor {
-
     @Override
     public void execute(
             long companyId, UnicodeProperties parametersUnicodeProperties,
@@ -43,7 +41,7 @@ public class NotificationTemplateActionExecutor implements NotificationActionExe
                         notificationTemplate.getType());
 
         JournalArticle journalArticleModel =
-                _journalArticleLocalServiceUtil.getJournalArticle(
+                _journalArticleLocalService.getJournalArticle(
                         (payloadJSONObject.getLong("resourcePrimKey")));
 
         Map<String, Object> currentVariables =
@@ -69,13 +67,11 @@ public class NotificationTemplateActionExecutor implements NotificationActionExe
                 ).portletId(
                         NotificationNewsStreamingModel.class.getName()
                 ).build());
-
     }
 
     private Map<String, Object> _getTermValues(
             JournalArticle journalArticle, Map<String, Object> variables)
-            throws NotificationMessageException {
-
+                throws NotificationMessageException {
         Map<String, Object> termValues =
                 HashMapBuilder.put(
                     "term_variables_key",
@@ -83,13 +79,11 @@ public class NotificationTemplateActionExecutor implements NotificationActionExe
                 ).build();
 
         for (JournalArticle articleField :
-                _journalArticleLocalServiceUtil.getArticles(
+                _journalArticleLocalService.getArticles(
                         journalArticle.getPrimaryKey())) {
-
             if (articleField.getStatus() !=
                     WorkflowConstants.STATUS_APPROVED ||
                     (termValues.get(articleField.getContent()) == null)) {
-
                 return null;
             }
 
@@ -98,12 +92,11 @@ public class NotificationTemplateActionExecutor implements NotificationActionExe
                             articleField.getResourcePrimKey());
 
             if (notificationNewsStreamingModel.getStatusNotification()
-                    .equals(NotificationStatusAndTypesConstants.STATUS_APPROVED)) {
+                    .equals(NotificationConstants.STATUS_APPROVED)) {
                 termValues.put(articleField.getTitle(),
                         notificationNewsStreamingModel.getClass());
             }
         }
-
         return termValues;
     }
 
@@ -116,7 +109,6 @@ public class NotificationTemplateActionExecutor implements NotificationActionExe
                     if (payloadJSONObject == null) {
                         return null;
                     }
-
                     return MapUtil.getString(
                             (Map<String, ?>)
                                     payloadJSONObject.get("messageModel"),
@@ -137,44 +129,37 @@ public class NotificationTemplateActionExecutor implements NotificationActionExe
 
     private NotificationNewsStreamingModel _fetchNotificationNewsEbookModel(
             long notificationNewsEbookId) throws NotificationMessageException {
-
         if (notificationNewsEbookId < 0) {
             if(_log.isWarnEnabled()) {
-                _log.warn(
-                        "notificationNewsEbookId is invalid");
+                _log.warn("notificationNewsEbookId is invalid");
             }
             else {
                 throw new NotificationMessageException(
                         "notificationNewsEbookId is invalid");
             }
-
-            return null;
         }
 
         NotificationNewsStreamingModel notificationNewsStreamingModel
                 = new NotificationNewsStreamingModel();
 
-        notificationNewsStreamingModel
-                .getNotificationNewsStreamingId(notificationNewsEbookId);
+        notificationNewsStreamingModel.getNotificationNewsStreamingId(
+                notificationNewsEbookId);
 
         return notificationNewsStreamingModel;
     }
 
     @Override
     public String getKey() {
-        return NotificationStatusAndTypesConstants.KEY_NOTIFICATION;
+        return NotificationConstants.KEY_NOTIFICATION;
     }
 
-    private static final Log _log =
-            LogFactoryUtil.getLog(NotificationTemplateActionExecutor.class);
+    private static final Log _log = LogFactoryUtil.getLog(
+            NotificationTemplateActionExecutor.class);
 
     @Reference
-    private JournalArticleLocalService _journalArticleLocalServiceUtil;
-
+    private JournalArticleLocalService _journalArticleLocalService;
     @Reference
     private NotificationTemplateLocalService _notificationTemplateLocalService;
-
     @Reference
     private NotificationTypeServiceTracker _notificationTypeServiceTracker;
-
 }

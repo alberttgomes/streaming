@@ -3,8 +3,7 @@ package com.streaming.constants;
 /**
  * @author Albert Gomes Cabral
  */
-public class NotificationStatusAndTypesConstants {
-
+public class NotificationConstants {
     public static final String STATUS_APPROVED = "approved";
 
     public static final String STATUS_DENIED = "denied";
@@ -16,5 +15,4 @@ public class NotificationStatusAndTypesConstants {
     public static final String TYPE_EMAIL = "email";
 
     public static final String TYPE_USER = "user";
-
 }

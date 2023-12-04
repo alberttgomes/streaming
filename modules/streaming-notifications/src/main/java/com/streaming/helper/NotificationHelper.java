@@ -3,11 +3,10 @@ package com.streaming.helper;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.messaging.Message;
 import com.streaming.constants.MessageConstants;
-import com.streaming.constants.NotificationStatusAndTypesConstants;
+import com.streaming.constants.NotificationConstants;
 import com.streaming.constants.NotificationsEbookPortletKeys;
 import com.streaming.exceptions.NotificationMessageException;
 import com.streaming.portlet.NotificationEbookPortlet;
-import com.liferay.notification.constants.NotificationConstants;
 import com.liferay.notification.context.NotificationContext;
 import com.liferay.notification.model.NotificationQueueEntry;
 import com.liferay.notification.model.NotificationRecipient;
@@ -51,7 +50,7 @@ public class NotificationHelper {
         _notificationContext.setNotificationTemplate(
                 _notificationTemplate);
         _notificationContext.setTermValues(termValues);
-        _notificationContext.setType(NotificationConstants.TYPE_EMAIL);
+        _notificationContext.setType(com.liferay.notification.constants.NotificationConstants.TYPE_EMAIL);
         _notificationContext.setType(
                 MessageConstants.NEWS_STREAMING_MESSAGE);
 
@@ -97,7 +96,7 @@ public class NotificationHelper {
                 "notification_model_news_status");
 
         if (!notificationStatus.equals
-                (NotificationStatusAndTypesConstants.STATUS_APPROVED)) {
+                (NotificationConstants.STATUS_APPROVED)) {
             return;
         }
 
