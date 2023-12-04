@@ -1,5 +1,0 @@
-Bundle-Name: untitled-test
-Bundle-SymbolicName: untitled.test
-Bundle-Version: 1.0.0
--includeresource: untitled.client.jar=../untitled-client/build/libs/untitled.client-1.0.0.jar;lib:=true
--provider-policy: ${replacestring;${range;[==,==]};.*,(.*)];$1}
