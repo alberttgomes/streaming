@@ -1,5 +1,5 @@
 dependencies {
-	compile project(":modules:streaming-service-builder:streaming-service-builder-api")
+	compileOnly project(":modules:streaming-dashboard:streaming-dashboard-api")
 
 	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
 }

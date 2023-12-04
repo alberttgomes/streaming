@@ -1,6 +1,8 @@
-Bundle-Name: streaming-service-builder-service
-Bundle-SymbolicName: com.streaming.service
+Bundle-Name: streaming-dashboard
+Bundle-SymbolicName: com.streaming.dashboard
 Bundle-Version: 1.0.0
+Export-Package: \
+    com.streaming
 Liferay-Require-SchemaVersion: 1.0.0
 Liferay-Service: true
 -dsannotations-options: inherit

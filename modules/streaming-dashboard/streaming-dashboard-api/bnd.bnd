@@ -7,4 +7,4 @@ Export-Package:\
 	com.streaming.service,\
 	com.streaming.service.persistence
 -check: EXPORTS
--includeresource: META-INF/service.xml=../streaming-service-builder-service/service.xml
+-includeresource: META-INF/service.xml=../streaming-dashboad-service/service.xml
