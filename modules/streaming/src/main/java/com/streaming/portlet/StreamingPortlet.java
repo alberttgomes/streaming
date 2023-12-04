@@ -1,7 +1,5 @@
 package com.streaming.portlet;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.service.JournalArticleLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -54,57 +52,41 @@ import java.util.*;
 public class StreamingPortlet extends MVCPortlet {
 
 	@Override
-	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
-			throws PortletException, IOException {
+	public void doView(
+			RenderRequest renderRequest, RenderResponse renderResponse)
+				throws PortletException, IOException {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)
-				renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
 
 		long companyId = themeDisplay.getCompanyId();
-
 		long groupId = themeDisplay.getSiteGroupId();
 
 		Group group = themeDisplay.getSiteGroup();
-
 		Contact contact = themeDisplay.getContact();
-
 		String externalReferenceCode =
 				group.getExternalReferenceCode();
-
 		long mvccVersion = group.getMvccVersion();
-
-		StreamingPortletHelper streamingPortletHelper =
-				new StreamingPortletHelper();
 
 		CarouselContentModel carouselContentModel =
 				new CarouselContentModel();
-
 		try {
 			PreferencesPortletModel preferencesPortletModel =
-					streamingPortletHelper.setPreferencesModel(
+					StreamingPortletHelper.setPreferencesModel(
 							companyId, groupId, mvccVersion, contact.getUserId(),
 							VocabularyCategoriesConstant.VOCABULARY_STREAMING_NAME,
 							externalReferenceCode, renderRequest);
 
-			List<CategoriesModel> categoriesModel = streamingPortletHelper.getCategories(
+			List<CategoriesModel> categoriesModel = StreamingPortletHelper.getCategories(
 					preferencesPortletModel.getVocabularyCategories());
 
-			if (categoriesModel == null) {
-				_log.error(
-						"category model is null \n" +
-						"This category object is necessary to found the articles");
-
-				return;
-			}
-
 			List<com.liferay.portal.kernel.search.Document> documents =
-					streamingPortletHelper.getDocumentsByCategory(themeDisplay, -1, -1,
+					StreamingPortletHelper.getDocumentsByCategory(themeDisplay, -1, -1,
 							categoriesModel.get(0).getCategoryId());
 
 			int count = 0;
 
 			for (com.liferay.portal.kernel.search.Document doc  : documents) {
-
 				count++;
 
 				String articleId = doc.get("articleId");
@@ -112,14 +94,12 @@ public class StreamingPortlet extends MVCPortlet {
 				JournalArticle journalArticle =
 						JournalArticleLocalServiceUtil.getLatestArticle(groupId, articleId);
 
-				Set<String> fieldsName =
-						streamingPortletHelper.getFieldsByStructure(journalArticle);
+				Set<String> fieldsName = StreamingPortletHelper.getFieldsByStructure(journalArticle);
 
 				String documentContent = journalArticle.getContentByLocale(
 						themeDisplay.getLanguageId());
 
-				Document document = null;
-
+				Document document;
 				document = SAXReaderUtil.read(new StringReader(documentContent));
 
 				Map<String, String> map = new HashMap<>();
@@ -131,89 +111,55 @@ public class StreamingPortlet extends MVCPortlet {
 				String title;
 
 				for (String values : fieldsName) {
-
-					String[] value = values.split("\\=");
-
+					String[] value = values.split("=");
 				    switch (value[0])  {
 						case "Text13771537":
-							title = streamingPortletHelper.getFields(
+							title = StreamingPortletHelper.getFields(
 									carouselContentModel.getFieldSet(), value[0],themeDisplay, document);
-
 							carouselContentModel.setTitle(title);
-
 							map.put(value[0], title);
-
 							break;
-
 						case "RichText53999476":
-							description = streamingPortletHelper.getFields(
+							description = StreamingPortletHelper.getFields(
 									carouselContentModel.getFieldSet(), value[0],themeDisplay, document);
-
 							carouselContentModel.setDescription(description);
-
 							map.put("rich-text", description);
-
 							break;
-
 						case "Image87907379":
-							fileEntry = streamingPortletHelper.getFields(
+							fileEntry = StreamingPortletHelper.getFields(
 									carouselContentModel.getFieldSet(), value[0],themeDisplay, document);
-
 							carouselContentModel.setFileEntry(fileEntry);
-
 							map.put("image", fileEntry);
-
 							break;
-
 						case "Date63543359":
-							date = streamingPortletHelper.getFields(
+							date = StreamingPortletHelper.getFields(
 									carouselContentModel.getFieldSet(), value[0], themeDisplay, document);
-
 							carouselContentModel.setDate(date);
-
 							map.put("date", date);
-
 							break;
-
 						case "Color64500276":
-							color = streamingPortletHelper.getFields(
+							color = StreamingPortletHelper.getFields(
 									carouselContentModel.getFieldSet(), value[0],themeDisplay, document);
-
 							carouselContentModel.setColor(color);
-
 							map.put("color", color);
-
 							break;
 					}
 				}
-				carouselRender.put("field_" + count, map);
+				_carouselRender.put("field_" + count, map);
 			}
 		}
 		catch (PortalException | DocumentException exception) {
 			throw new PortletException(exception);
 		}
 		finally {
-			renderRequest.setAttribute("carouselData", getCarouselDataPortlet());
+			renderRequest.setAttribute("carouselJsonData", _carouselRender);
 
 			super.doView(renderRequest, renderResponse);
 		}
-
 	}
 
-	public Object getCarouselDataPortlet() throws JsonProcessingException {
+	private final Map<String, Object> _carouselRender = new LinkedHashMap<>();
 
-		ObjectMapper mapper = new ObjectMapper();
-
-		String jsonParser = mapper.writeValueAsString(carouselRender.values());
-
-		return jsonParser.isEmpty() ?
-				new CarouselContentModel().toString() : jsonParser.trim();
-	}
-
-	private final Map<String, Object> carouselRender =
-			new LinkedHashMap<String, Object>();
-
-	private static final Log _log =
-			LogFactoryUtil.getLog(StreamingPortlet.class);
+	private static final Log _log = LogFactoryUtil.getLog(StreamingPortlet.class);
 
 }

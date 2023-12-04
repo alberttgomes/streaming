@@ -40,7 +40,7 @@ import java.util.*;
  */
 public class StreamingPortletHelper {
 
-    public List<CategoriesModel> getCategories(String vocabularyName) {
+    public static List<CategoriesModel> getCategories(String vocabularyName) {
 
         List<AssetVocabulary> vocabularies =
                 AssetVocabularyLocalServiceUtil.getAssetVocabularies(-1, -1);
@@ -50,7 +50,6 @@ public class StreamingPortletHelper {
         for (AssetVocabulary vocabulary : vocabularies) {
             if (vocabulary.getName().equalsIgnoreCase(vocabularyName)) {
                 categoryId = vocabulary.getVocabularyId();
-
                 break;
             }
         }
@@ -64,13 +63,13 @@ public class StreamingPortletHelper {
             for (AssetCategory category : categories) {
                 if (category.getName().equals(vocabularyName)) {
                     categoryId = category.getVocabularyId();
-
                     break;
                 }
             }
 
-            List<AssetCategory> categoriesList = AssetCategoryLocalServiceUtil
-                    .getChildCategories(categoryId, -1, -1, null);
+            List<AssetCategory> categoriesList =
+                    AssetCategoryLocalServiceUtil.getChildCategories(
+                            categoryId, -1, -1, null);
 
             categoriesList.parallelStream().forEach(cat -> {
                 CategoriesModel categoriesModel = new CategoriesModel();
@@ -92,12 +91,12 @@ public class StreamingPortletHelper {
                 categoryList.add(categoriesModel);
             });
         }
-
         return categoryList;
     }
 
-    public List<com.liferay.portal.kernel.search.Document> getDocumentsByCategory(
-            ThemeDisplay themeDisplay, int start, int end, long categoryId) throws RuntimeException {
+    public static List<com.liferay.portal.kernel.search.Document> getDocumentsByCategory(
+            ThemeDisplay themeDisplay, int start, int end, long categoryId)
+                throws RuntimeException {
 
         List<com.liferay.portal.kernel.search.Document> docs = null;
 
@@ -110,10 +109,10 @@ public class StreamingPortletHelper {
             TermQuery termQueryEntryClassName = _buildTermQuery("entryClassName", JournalArticle.class.getName());
             filterQuery.add(termQueryEntryClassName, BooleanClauseOccur.MUST);
 
-            TermQuery termQueryHead = _buildTermQuery("head","true");
+            TermQuery termQueryHead = _buildTermQuery("head", "true");
             filterQuery.add(termQueryHead, BooleanClauseOccur.MUST);
 
-            BooleanClause<Query> clause = new BooleanClauseImpl<>(filterQuery,  BooleanClauseOccur.MUST);
+            BooleanClause<Query> clause = new BooleanClauseImpl<>(filterQuery, BooleanClauseOccur.MUST);
 
             SearchContext searchContext =
                     _getSearchContext(themeDisplay, start, end);
@@ -129,18 +128,14 @@ public class StreamingPortletHelper {
             }
         }
         catch (RuntimeException | ParseException |
-               SearchException runtimeException) {
-
+                 SearchException runtimeException) {
             throw new RuntimeException(runtimeException);
         }
-        
         return docs;
     }
 
-
-    public Set<String> getFieldsByStructure(JournalArticle journalArticle)
-            throws PortalException {
-
+    public static Set<String> getFieldsByStructure(
+            JournalArticle journalArticle) throws PortalException {
         DDMStructure structure = journalArticle.getDDMStructure();
         Set<String> fieldNames = structure.getFieldNames();
         Set<String> fields = new HashSet<String>();
@@ -149,62 +144,53 @@ public class StreamingPortletHelper {
             fields.add(name + "=" +
                     structure.getFieldDataType(name));
         }
-
         return fields;
     }
 
-    public String getFields(
+    public static String getFields(
             String fieldGroup, String field, ThemeDisplay themeDisplay, Document document)
-                throws PortalException, JsonProcessingException {
-
+            throws PortalException, JsonProcessingException {
         String xPathFieldGroup =
                 "/root/dynamic-element[@name='" + fieldGroup + "']";
-
         Node node = document.selectSingleNode(
                 xPathFieldGroup + "/dynamic-element[@name='" + field + "']/dynamic-content");
 
         String fieldResult = StringPool.BLANK;
 
         if (Validator.isNotNull(node)) {
-
             fieldResult = node.getText().trim();
 
-            if (fieldResult.contains("groupId") && fieldResult.contains("uuid")) {
+            if (fieldResult.contains("groupId") &&
+                    fieldResult.contains("uuid")) {
 
                 ObjectMapper mapper = new ObjectMapper();
 
-                Map<String,Object> jsonMap = mapper.readValue(
+                Map<String, Object> jsonMap = mapper.readValue(
                         fieldResult, Map.class);
 
                 Object groupId = jsonMap.get("groupId");
-
                 Object uuid = jsonMap.get("uuid");
 
                 DLFileEntry doc = DLFileEntryServiceUtil.getFileEntryByUuidAndGroupId(
                         uuid.toString(), Long.parseLong(groupId.toString()));
 
-                FileEntry fileEntry =
-                        DLAppServiceUtil.getFileEntry(doc.getFileEntryId());
-
+                FileEntry fileEntry = DLAppServiceUtil.getFileEntry(
+                        doc.getFileEntryId());
                 FileVersion fileVersion = fileEntry.getFileVersion();
 
                 fieldResult = _dlurlHelper.getPreviewURL(
                         fileEntry, fileVersion, themeDisplay, StringPool.BLANK);
-
             }
         }
-
         return fieldResult;
     }
 
-    public PreferencesPortletModel setPreferencesModel(
+    public static PreferencesPortletModel setPreferencesModel(
             long companyId, long groupId, long mvccVersion, long userId,
             String VocabularyCategory, String externalReferenceCode, PortletRequest preferences)
                 throws RuntimeException {
-
         PortletPreferences portletPreferences =
                 preferences.getPreferences();
-
         PreferencesPortletModel preferencesPortletModel =
                 new PreferencesPortletModel();
 
@@ -219,16 +205,15 @@ public class StreamingPortletHelper {
         return preferencesPortletModel;
     }
 
-    private static TermQueryImpl _buildTermQuery(String field, String value){
+    private static TermQueryImpl _buildTermQuery(String field, String value) {
         return new TermQueryImpl(new QueryTermImpl(field, value));
     }
 
-    private SearchContext _getSearchContext(
-            ThemeDisplay themeDisplay, int start, int end){
-
+    private static SearchContext _getSearchContext(
+            ThemeDisplay themeDisplay, int start, int end) {
         long[] groupsIds = {themeDisplay.getScopeGroupId()};
 
-        SearchContext searchContext =  new SearchContext();
+        SearchContext searchContext = new SearchContext();
         searchContext.setCompanyId(themeDisplay.getCompanyId());
         searchContext.setGroupIds(groupsIds);
         searchContext.setStart(start);
@@ -238,6 +223,6 @@ public class StreamingPortletHelper {
     }
 
     @Reference
-    private DLURLHelper _dlurlHelper;
+    private static DLURLHelper _dlurlHelper;
 
 }

@@ -5,6 +5,14 @@ package com.streaming.model;
  */
 public class CarouselContentModel {
 
+    public String getCategory() {
+        return _category;
+    }
+
+    public void setCategory(String category) {
+        this._category = category;
+    }
+
     public String getColor() {
         return _color;
     }
@@ -49,6 +57,8 @@ public class CarouselContentModel {
         this._title = title;
     }
 
+    private String _category;
+
     private String _color;
 
     private String _date;
@@ -63,8 +73,8 @@ public class CarouselContentModel {
 
     @Override
     public String toString() {
-        return "{color: '#" +  _color + "', date: '" + _date +
-                "', description: '" + _description + "', urlFileEntry: '" + _fileEntry + "', title: '" + _title + "'}";
+        return "{color: \"#" +  _color + "\", date: \"" + _date +
+                "\", description: \"" + _description + "\", urlFileEntry: \"" + _fileEntry + "\", title: \"" + _title + "\"}";
     }
 
 }
