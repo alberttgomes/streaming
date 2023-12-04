@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
+
+<service-builder dependency-injector="ds" package-path="com.streaming">
+	<namespace>Carousel</namespace>
+<!--	<entity data-source="sampleDataSource" local-service="true" name="Carousel" remote-service="false" session-factory="sampleSessionFactory" table="carousel" tx-manager="sampleTransactionManager uuid="true"">-->
+	<entity local-service="true" name="Streaming" remote-service="true" uuid="true">
+
+		<!-- PK fields -->
+
+		<column name="streamingId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="title" type="String" />
+		<column name="description" type="String" />
+		<column name="fileEntry" type="String" />
+		<column name="launchDate" type="Date" />
+		<column name="category" type="String" />
+		<column name="colorTheme" type="String" />
+
+		<!-- Order -->
+
+		<order by="asc">
+			<order-column name="title" />
+		</order>
+
+		<!-- Finder methods -->
+
+		<finder name="Field2" return-type="List">
+			<finder-column name="" />
+		</finder>
+
+		<!-- References -->
+
+		<reference entity="DLURLHelper" package-path="com.liferay.document.library.util" />
+	</entity>
+	<exceptions>
+		<exception>Carousel</exception>
+		<exception>CarouselNotFound</exception>
+	</exceptions>
+</service-builder>

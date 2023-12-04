@@ -1,0 +1,9 @@
+apiDir: "../untitled-api/src/main/java"
+apiPackagePath: "untitled"
+application:
+    baseURI: "/untitled"
+    className: "UntitledApplication"
+    name: "Untitled"
+author: "me"
+clientDir: "../untitled-client/src/main/java"
+testDir: "../untitled-test/src/testIntegration/java"

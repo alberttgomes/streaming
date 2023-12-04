@@ -1,0 +1,6 @@
+Bundle-Name: untitled-api
+Bundle-SymbolicName: untitled.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	untitled.dto.v1_0,\
+	untitled.resource.v1_0

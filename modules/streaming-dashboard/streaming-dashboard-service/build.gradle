@@ -1,0 +1,11 @@
+dependencies {
+	compile project(":modules:streaming-service-builder:streaming-service-builder-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
+}
+
+buildService {
+	apiDir = "../streaming-service-builder-api/src/main/java"
+}
+
+group = "com.streaming"

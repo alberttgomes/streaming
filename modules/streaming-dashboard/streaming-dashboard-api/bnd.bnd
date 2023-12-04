@@ -1,0 +1,10 @@
+Bundle-Name: streaming-service-builder-api
+Bundle-SymbolicName: com.streaming.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.streaming.exception,\
+	com.streaming.model,\
+	com.streaming.service,\
+	com.streaming.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../streaming-service-builder-service/service.xml
