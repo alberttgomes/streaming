@@ -1,33 +1,34 @@
 <%@ include file="/init.jsp" %>
 
-<p>
-	<b><liferay-ui:message key="streaming.caption"/></b>
-</p>
+<%
 
-<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-  <p>Category Session</p>
+Object carouselData = (Object)request.getAttribute("carouselData");
 
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-        <img src="${url-file-entry}" class="d-block w-100" alt="image-carousel">
-        <span class="carousel-control-title" aria-hidden="true">"${title}"</span>
-        <span class="carousel-control-description" aria-hidden="true">"${title}"</span>
-    </div>
+%>
 
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
+<p><b><liferay-ui:message key="streaming.caption"/></b></p>
 
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
+<img id="image-carousel" src="" class="d-block w-100" alt="image" />
 
+<!--
+<div id="container">
+    <react:component
+        module="streaming-frontend/StreamingView"
+        props="<%= carouselData %>"
+    />
 </div>
+-->
 
-<script type="text/javascript">
-    let carouselData = "${carouselContentModel}";
+<script>
+    let carouselDataEval = ${carouselData};
 
-    console.log("Carousel Portlet Data \n", carouselData);
+    let jsonObject = eval(carouselDataEval);
+
+    jsonObject.map((value, index) => {
+        document.getElementById("image-carousel").setAttribute("src",  value.image);
+
+        console.log(value.Color64500276, index);
+    })
+
+    console.log(jsonObject)
 </script>

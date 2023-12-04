@@ -18,22 +18,18 @@ import java.time.Instant;
         service = StreamingPortletMVCCommand.class
 )
 public class StreamingPortletMVCCommand {
-
     @Activate
     public void activePortletMVCommand()
             throws JsonProcessingException {
 
         Instant instant = Instant.now();
 
-        _log.info(
-                instant + "\\s" +
-                _streamingService.getPortletContent());
+        _log.info(instant + "\\s" + _streamingService.getPortletContent());
     }
 
-    private static final Log _log =
-            LogFactoryUtil.getLog(StreamingPortletMVCCommand.class);
+    private static final Log _log = LogFactoryUtil.getLog(
+            StreamingPortletMVCCommand.class);
 
     @Reference
     private StreamingService _streamingService;
-
 }
