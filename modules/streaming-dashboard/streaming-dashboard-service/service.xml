@@ -4,8 +4,7 @@
 <service-builder dependency-injector="ds" mvcc-enabled="true" package-path="com.streaming">
 	<namespace>CarouselItemsDashboard</namespace>
 	<!-- <entity data-source="sampleDataSource" local-service="true" name="Carousel" remote-service="false" session-factory="sampleSessionFactory" table="carousel" tx-manager="sampleTransactionManager uuid="true"">-->
-	<entity local-service="true" external-reference-code="group" name="CarouselItemsDashboard" remote-service="true" uuid="true"  table="STG-CarouselItemsDashboard">
-
+	<entity local-service="true" external-reference-code="group" name="CarouselDashboardManager" remote-service="true" uuid="true"  table="STG-CarouselDashboardManager">
 		<!-- PK fields -->
 
 		<column name="streamingId" primary="true" type="long" />
@@ -27,8 +26,10 @@
 		<column name="category" type="String" />
 		<column name="colorTheme" type="String" />
 		<column name="priority" type="String" />
+		<column name="locale" type="Locale" />
 		<column name="title" type="String" />
-		<column name="user" type="String" />
+		<column name="user" type="User" />
+		<column name="dashboardCategoryItem" type="DashboardCategoryItem" />
 
 		<!-- Order -->
 
@@ -38,13 +39,14 @@
 
 		<!-- Finder methods -->
 
-		<finder name="GetCarouselItems" return-type="Collection">
+		<finder name="CreateNewCategoryItem" return-type="DashboardCategoryItem">
 			<finder-column name="companyId" />
 			<finder-column name="groupId" />
+			<finder-column name="DashboardCategoryItem" />
 			<finder-column name="streamingId" />
 		</finder>
 
-		<finder name="GetCarouselItem" return-type="CarouselItem">
+		<finder name="GetCarouselItems" return-type="Collection">
 			<finder-column name="companyId" />
 			<finder-column name="groupId" />
 			<finder-column name="streamingId" />
@@ -52,11 +54,15 @@
 
 		<!-- References -->
 
-		<reference entity="AssetEntry" package-path="com.liferay.portlet.asset" />
+		<reference entity="AssetCategory" package-path="com.liferay.asset.kernel.model" />
 
+		<reference entity="AssetVocabulary" package-path="com.liferay.asset.kernel.model" />
+
+		<reference entity="User" package-path="com.liferay.portal.kernel.model" />
 	</entity>
 	<exceptions>
-		<exception>CarouselItemDashboard</exception>
-		<exception>CarouselNotFound</exception>
+		<exception>CarouselDashboardManager</exception>
+		<exception>CarouselDashboardManagerRuleUser</exception>
+		<exception>CarouselDashboardManagerNotFound</exception>
 	</exceptions>
 </service-builder>
