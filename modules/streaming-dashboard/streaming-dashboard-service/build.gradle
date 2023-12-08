@@ -5,7 +5,7 @@ dependencies {
 }
 
 buildService {
-	apiDir = "../streaming-service-builder-api/src/main/java"
+	apiDir = "../streaming-dashboard-api/src/main/java"
 }
 
 group = "com.streaming"
