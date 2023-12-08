@@ -142,9 +142,6 @@ public class NotificationTemplateActionExecutor implements NotificationActionExe
         NotificationNewsStreamingModel notificationNewsStreamingModel
                 = new NotificationNewsStreamingModel();
 
-        notificationNewsStreamingModel.getNotificationNewsStreamingId(
-                notificationNewsEbookId);
-
         return notificationNewsStreamingModel;
     }
 

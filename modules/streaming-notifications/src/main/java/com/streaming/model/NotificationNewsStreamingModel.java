@@ -46,15 +46,14 @@ public class NotificationNewsStreamingModel {
 
     public long getNotificationNewsStreamingId(
             long notificationNewsEbookIdParam) {
-
-        if (notificationNewsEbookIdParam != _notificationId) {
+       if (notificationNewsEbookIdParam != _notificationId) {
             return -1;
         }
-
         return _notificationId;
     }
 
-    public void setNotificationNewsEbookId(long notificationNewsEbookId) {
+    public void setNotificationNewsEbookId(
+            long notificationNewsEbookId) {
         this._notificationId = notificationNewsEbookId;
     }
 

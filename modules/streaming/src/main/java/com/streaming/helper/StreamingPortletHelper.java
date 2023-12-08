@@ -149,7 +149,7 @@ public class StreamingPortletHelper {
 
     public static String getFields(
             String fieldGroup, String field, ThemeDisplay themeDisplay, Document document)
-            throws PortalException, JsonProcessingException {
+                throws PortalException, JsonProcessingException {
         String xPathFieldGroup =
                 "/root/dynamic-element[@name='" + fieldGroup + "']";
         Node node = document.selectSingleNode(
@@ -160,9 +160,7 @@ public class StreamingPortletHelper {
         if (Validator.isNotNull(node)) {
             fieldResult = node.getText().trim();
 
-            if (fieldResult.contains("groupId") &&
-                    fieldResult.contains("uuid")) {
-
+            if (fieldResult.contains("groupId") && fieldResult.contains("uuid")) {
                 ObjectMapper mapper = new ObjectMapper();
 
                 Map<String, Object> jsonMap = mapper.readValue(
@@ -189,10 +187,8 @@ public class StreamingPortletHelper {
             long companyId, long groupId, long mvccVersion, long userId,
             String VocabularyCategory, String externalReferenceCode, PortletRequest preferences)
                 throws RuntimeException {
-        PortletPreferences portletPreferences =
-                preferences.getPreferences();
-        PreferencesPortletModel preferencesPortletModel =
-                new PreferencesPortletModel();
+        PortletPreferences portletPreferences = preferences.getPreferences();
+        PreferencesPortletModel preferencesPortletModel = new PreferencesPortletModel();
 
         preferencesPortletModel.setVocabularyCategories(VocabularyCategory);
         preferencesPortletModel.setCompanyId(companyId);

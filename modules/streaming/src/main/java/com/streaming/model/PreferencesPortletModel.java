@@ -9,8 +9,8 @@ public class PreferencesPortletModel {
         return _companyId;
     }
 
-    public void setCompanyId(long _companyId) {
-        this._companyId = _companyId;
+    public void setCompanyId(long companyId) {
+        this._companyId = companyId;
     }
 
     public String getExternalReferenceCode(){
@@ -25,32 +25,32 @@ public class PreferencesPortletModel {
         return _groupId;
     }
 
-    public void setGroupId(long _groupId) {
-        this._groupId = _groupId;
+    public void setGroupId(long groupId) {
+        this._groupId = groupId;
     }
 
     public long getUserId() {
         return _userId;
     }
 
-    public void setUserId(long _userId) {
-        this._userId = _userId;
+    public void setUserId(long userId) {
+        this._userId = userId;
     }
 
     public Object getPreferences() {
         return _preferences;
     }
 
-    public void setPreferences(Object _preferences) {
-        this._preferences = _preferences;
+    public void setPreferences(Object preferences) {
+        this._preferences = preferences;
     }
 
     public long getMvccVersion() {
         return _mvccVersion;
     }
 
-    public void setMvccVersion(long _mvccVersion) {
-        this._mvccVersion = _mvccVersion;
+    public void setMvccVersion(long mvccVersion) {
+        this._mvccVersion = mvccVersion;
     }
 
     public String getVocabularyCategories() {
