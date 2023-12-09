@@ -78,7 +78,7 @@ public class CarouselItemsDashboardCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("{mvccVersion=");
 		sb.append(mvccVersion);
@@ -104,6 +104,8 @@ public class CarouselItemsDashboardCacheModel
 		sb.append(category);
 		sb.append(", colorTheme=");
 		sb.append(colorTheme);
+		sb.append(", instanceCategoryFk=");
+		sb.append(instanceCategoryFk);
 		sb.append(", priority=");
 		sb.append(priority);
 		sb.append(", title=");
@@ -175,6 +177,8 @@ public class CarouselItemsDashboardCacheModel
 			carouselItemsDashboardImpl.setColorTheme(colorTheme);
 		}
 
+		carouselItemsDashboardImpl.setInstanceCategoryFk(instanceCategoryFk);
+
 		if (priority == null) {
 			carouselItemsDashboardImpl.setPriority("");
 		}
@@ -212,6 +216,8 @@ public class CarouselItemsDashboardCacheModel
 		modifiedDate = objectInput.readLong();
 		category = objectInput.readUTF();
 		colorTheme = objectInput.readUTF();
+
+		instanceCategoryFk = objectInput.readLong();
 		priority = objectInput.readUTF();
 		title = objectInput.readUTF();
 	}
@@ -266,6 +272,8 @@ public class CarouselItemsDashboardCacheModel
 			objectOutput.writeUTF(colorTheme);
 		}
 
+		objectOutput.writeLong(instanceCategoryFk);
+
 		if (priority == null) {
 			objectOutput.writeUTF("");
 		}
@@ -293,6 +301,7 @@ public class CarouselItemsDashboardCacheModel
 	public long modifiedDate;
 	public String category;
 	public String colorTheme;
+	public long instanceCategoryFk;
 	public String priority;
 	public String title;
 

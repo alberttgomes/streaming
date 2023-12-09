@@ -57,6 +57,7 @@ public class CarouselItemsDashboardWrapper
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("category", getCategory());
 		attributes.put("colorTheme", getColorTheme());
+		attributes.put("instanceCategoryFk", getInstanceCategoryFk());
 		attributes.put("priority", getPriority());
 		attributes.put("title", getTitle());
 
@@ -136,6 +137,12 @@ public class CarouselItemsDashboardWrapper
 
 		if (colorTheme != null) {
 			setColorTheme(colorTheme);
+		}
+
+		Long instanceCategoryFk = (Long)attributes.get("instanceCategoryFk");
+
+		if (instanceCategoryFk != null) {
+			setInstanceCategoryFk(instanceCategoryFk);
 		}
 
 		String priority = (String)attributes.get("priority");
@@ -224,6 +231,16 @@ public class CarouselItemsDashboardWrapper
 	@Override
 	public long getGroupId() {
 		return model.getGroupId();
+	}
+
+	/**
+	 * Returns the instance category fk of this carousel items dashboard.
+	 *
+	 * @return the instance category fk of this carousel items dashboard
+	 */
+	@Override
+	public long getInstanceCategoryFk() {
+		return model.getInstanceCategoryFk();
 	}
 
 	/**
@@ -389,6 +406,16 @@ public class CarouselItemsDashboardWrapper
 	@Override
 	public void setGroupId(long groupId) {
 		model.setGroupId(groupId);
+	}
+
+	/**
+	 * Sets the instance category fk of this carousel items dashboard.
+	 *
+	 * @param instanceCategoryFk the instance category fk of this carousel items dashboard
+	 */
+	@Override
+	public void setInstanceCategoryFk(long instanceCategoryFk) {
+		model.setInstanceCategoryFk(instanceCategoryFk);
 	}
 
 	/**

@@ -14,6 +14,7 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="category" type="String" />
 		<field name="colorTheme" type="String" />
+		<field name="instanceCategoryFk" type="long" />
 		<field name="priority" type="String" />
 		<field name="title" type="String" />
 	</model>

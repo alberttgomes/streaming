@@ -267,6 +267,20 @@ public interface CarouselItemsDashboardModel
 	public void setColorTheme(String colorTheme);
 
 	/**
+	 * Returns the instance category fk of this carousel items dashboard.
+	 *
+	 * @return the instance category fk of this carousel items dashboard
+	 */
+	public long getInstanceCategoryFk();
+
+	/**
+	 * Sets the instance category fk of this carousel items dashboard.
+	 *
+	 * @param instanceCategoryFk the instance category fk of this carousel items dashboard
+	 */
+	public void setInstanceCategoryFk(long instanceCategoryFk);
+
+	/**
 	 * Returns the priority of this carousel items dashboard.
 	 *
 	 * @return the priority of this carousel items dashboard

@@ -14,13 +14,22 @@
 
 package com.streaming.service.http;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.auth.HttpPrincipal;
+import com.liferay.portal.kernel.service.http.TunnelUtil;
+import com.liferay.portal.kernel.util.MethodHandler;
+import com.liferay.portal.kernel.util.MethodKey;
+
+import com.streaming.service.CarouselItemsDashboardServiceUtil;
+
 /**
  * Provides the HTTP utility for the
- * <code>com.streaming.service.CarouselItemsDashboardServiceUtil</code> service
+ * <code>CarouselItemsDashboardServiceUtil</code> service
  * utility. The
  * static methods of this class calls the same methods of the service utility.
  * However, the signatures are different because it requires an additional
- * <code>com.liferay.portal.kernel.security.auth.HttpPrincipal</code> parameter.
+ * <code>HttpPrincipal</code> parameter.
  *
  * <p>
  * The benefits of using the HTTP utility is that it is fast and allows for
@@ -41,4 +50,170 @@ package com.streaming.service.http;
  * @generated
  */
 public class CarouselItemsDashboardServiceHttp {
+
+	public static void addNewCarouselItem(
+			HttpPrincipal httpPrincipal,
+			com.streaming.model.CarouselItemsDashboard carouselItemsDashboard,
+			long groupId,
+			com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay)
+		throws com.streaming.exception.CarouselInvalidFieldItemException,
+			   com.streaming.exception.CarouselItemNotAllowedException,
+			   com.streaming.exception.CarouselItemNotFoundException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				CarouselItemsDashboardServiceUtil.class, "addNewCarouselItem",
+				_addNewCarouselItemParameterTypes0);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, carouselItemsDashboard, groupId, themeDisplay);
+
+			try {
+				TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.streaming.exception.
+							CarouselItemNotAllowedException) {
+
+					throw (com.streaming.exception.
+						CarouselItemNotAllowedException)exception;
+				}
+
+				if (exception instanceof
+						com.streaming.exception.
+							CarouselInvalidFieldItemException) {
+
+					throw (com.streaming.exception.
+						CarouselInvalidFieldItemException)exception;
+				}
+
+				if (exception instanceof
+						com.streaming.exception.CarouselItemNotFoundException) {
+
+					throw (com.streaming.exception.
+						CarouselItemNotFoundException)exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
+	public static void deleteCarouselItemById(
+		HttpPrincipal httpPrincipal, long categoryId, long groupId,
+		com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay) {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				CarouselItemsDashboardServiceUtil.class,
+				"deleteCarouselItemById",
+				_deleteCarouselItemByIdParameterTypes1);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, categoryId, groupId, themeDisplay);
+
+			try {
+				TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
+	public static void getCarouselItemById(
+		HttpPrincipal httpPrincipal, long categoryId, long groupId,
+		com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay) {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				CarouselItemsDashboardServiceUtil.class, "getCarouselItemById",
+				_getCarouselItemByIdParameterTypes2);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, categoryId, groupId, themeDisplay);
+
+			try {
+				TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
+	public static void getCarouselItemById(
+		HttpPrincipal httpPrincipal, long categoryId, long groupId) {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				CarouselItemsDashboardServiceUtil.class, "getCarouselItemById",
+				_getCarouselItemByIdParameterTypes3);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, categoryId, groupId);
+
+			try {
+				TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(
+		CarouselItemsDashboardServiceHttp.class);
+
+	private static final Class<?>[] _addNewCarouselItemParameterTypes0 =
+		new Class[] {
+			com.streaming.model.CarouselItemsDashboard.class, long.class,
+			com.liferay.portal.kernel.theme.ThemeDisplay.class
+		};
+	private static final Class<?>[] _deleteCarouselItemByIdParameterTypes1 =
+		new Class[] {
+			long.class, long.class,
+			com.liferay.portal.kernel.theme.ThemeDisplay.class
+		};
+	private static final Class<?>[] _getCarouselItemByIdParameterTypes2 =
+		new Class[] {
+			long.class, long.class,
+			com.liferay.portal.kernel.theme.ThemeDisplay.class
+		};
+	private static final Class<?>[] _getCarouselItemByIdParameterTypes3 =
+		new Class[] {long.class, long.class};
+
 }

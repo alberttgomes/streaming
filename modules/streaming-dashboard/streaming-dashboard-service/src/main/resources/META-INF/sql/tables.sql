@@ -11,6 +11,7 @@ create table STG-CarouselItemsDashboard (
 	modifiedDate DATE null,
 	category VARCHAR(75) null,
 	colorTheme VARCHAR(75) null,
+	instanceCategoryFk LONG,
 	priority VARCHAR(75) null,
 	title VARCHAR(75) null
 );

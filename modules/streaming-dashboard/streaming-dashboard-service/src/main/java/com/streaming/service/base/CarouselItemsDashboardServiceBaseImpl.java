@@ -171,7 +171,7 @@ public abstract class CarouselItemsDashboardServiceBaseImpl
 	@Reference
 	protected com.liferay.portal.kernel.service.UserService userService;
 
-	protected static final Log _log = LogFactoryUtil.getLog(
+	private static final Log _log = LogFactoryUtil.getLog(
 		CarouselItemsDashboardServiceBaseImpl.class);
 
 }

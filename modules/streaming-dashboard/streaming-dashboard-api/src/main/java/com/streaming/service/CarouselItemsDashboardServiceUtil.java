@@ -14,6 +14,8 @@
 
 package com.streaming.service;
 
+import com.streaming.model.CarouselItemsDashboard;
+
 /**
  * Provides the remote service utility for CarouselItemsDashboard. This utility wraps
  * <code>com.streaming.service.impl.CarouselItemsDashboardServiceImpl</code> and is an
@@ -33,13 +35,41 @@ public class CarouselItemsDashboardServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to <code>com.streaming.service.impl.CarouselItemsDashboardServiceImpl</code> and rerun ServiceBuilder to regenerate this class.
 	 */
+	public static void addNewCarouselItem(
+			CarouselItemsDashboard carouselItemsDashboard, long groupId,
+			com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay)
+		throws com.streaming.exception.CarouselInvalidFieldItemException,
+			   com.streaming.exception.CarouselItemNotAllowedException,
+			   com.streaming.exception.CarouselItemNotFoundException {
+
+		getService().addNewCarouselItem(
+			carouselItemsDashboard, groupId, themeDisplay);
+	}
+
+	public static void deleteCarouselItemById(
+		long categoryId, long groupId,
+		com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay) {
+
+		getService().deleteCarouselItemById(categoryId, groupId, themeDisplay);
+	}
+
+	public static void getCarouselItemById(long categoryId, long groupId) {
+		getService().getCarouselItemById(categoryId, groupId);
+	}
+
+	public static void getCarouselItemById(
+		long categoryId, long groupId,
+		com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay) {
+
+		getService().getCarouselItemById(categoryId, groupId, themeDisplay);
+	}
 
 	/**
 	 * Returns the OSGi service identifier.
 	 *
 	 * @return the OSGi service identifier
 	 */
-	public static java.lang.String getOSGiServiceIdentifier() {
+	public static String getOSGiServiceIdentifier() {
 		return getService().getOSGiServiceIdentifier();
 	}
 

@@ -68,6 +68,10 @@ public class CarouselItemsDashboardTable
 	public final Column<CarouselItemsDashboardTable, String> colorTheme =
 		createColumn(
 			"colorTheme", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<CarouselItemsDashboardTable, Long> instanceCategoryFk =
+		createColumn(
+			"instanceCategoryFk", Long.class, Types.BIGINT,
+			Column.FLAG_DEFAULT);
 	public final Column<CarouselItemsDashboardTable, String> priority =
 		createColumn(
 			"priority", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);

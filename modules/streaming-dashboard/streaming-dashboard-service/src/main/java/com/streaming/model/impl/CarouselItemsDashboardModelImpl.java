@@ -81,7 +81,8 @@ public class CarouselItemsDashboardModelImpl
 		{"userId", Types.BIGINT}, {"userName", Types.VARCHAR},
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"category", Types.VARCHAR}, {"colorTheme", Types.VARCHAR},
-		{"priority", Types.VARCHAR}, {"title", Types.VARCHAR}
+		{"instanceCategoryFk", Types.BIGINT}, {"priority", Types.VARCHAR},
+		{"title", Types.VARCHAR}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -100,12 +101,13 @@ public class CarouselItemsDashboardModelImpl
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("category", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("colorTheme", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("instanceCategoryFk", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("priority", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("title", Types.VARCHAR);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table STG-CarouselItemsDashboard (mvccVersion LONG default 0 not null,uuid_ VARCHAR(75) null,externalReferenceCode VARCHAR(75) null,categoryId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,category VARCHAR(75) null,colorTheme VARCHAR(75) null,priority VARCHAR(75) null,title VARCHAR(75) null)";
+		"create table STG-CarouselItemsDashboard (mvccVersion LONG default 0 not null,uuid_ VARCHAR(75) null,externalReferenceCode VARCHAR(75) null,categoryId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,category VARCHAR(75) null,colorTheme VARCHAR(75) null,instanceCategoryFk LONG,priority VARCHAR(75) null,title VARCHAR(75) null)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table STG-CarouselItemsDashboard";
@@ -346,6 +348,13 @@ public class CarouselItemsDashboardModelImpl
 			"colorTheme",
 			(BiConsumer<CarouselItemsDashboard, String>)
 				CarouselItemsDashboard::setColorTheme);
+		attributeGetterFunctions.put(
+			"instanceCategoryFk",
+			CarouselItemsDashboard::getInstanceCategoryFk);
+		attributeSetterBiConsumers.put(
+			"instanceCategoryFk",
+			(BiConsumer<CarouselItemsDashboard, Long>)
+				CarouselItemsDashboard::setInstanceCategoryFk);
 		attributeGetterFunctions.put(
 			"priority", CarouselItemsDashboard::getPriority);
 		attributeSetterBiConsumers.put(
@@ -640,6 +649,21 @@ public class CarouselItemsDashboardModelImpl
 
 	@JSON
 	@Override
+	public long getInstanceCategoryFk() {
+		return _instanceCategoryFk;
+	}
+
+	@Override
+	public void setInstanceCategoryFk(long instanceCategoryFk) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_instanceCategoryFk = instanceCategoryFk;
+	}
+
+	@JSON
+	@Override
 	public String getPriority() {
 		if (_priority == null) {
 			return "";
@@ -755,6 +779,8 @@ public class CarouselItemsDashboardModelImpl
 		carouselItemsDashboardImpl.setModifiedDate(getModifiedDate());
 		carouselItemsDashboardImpl.setCategory(getCategory());
 		carouselItemsDashboardImpl.setColorTheme(getColorTheme());
+		carouselItemsDashboardImpl.setInstanceCategoryFk(
+			getInstanceCategoryFk());
 		carouselItemsDashboardImpl.setPriority(getPriority());
 		carouselItemsDashboardImpl.setTitle(getTitle());
 
@@ -792,6 +818,8 @@ public class CarouselItemsDashboardModelImpl
 			this.<String>getColumnOriginalValue("category"));
 		carouselItemsDashboardImpl.setColorTheme(
 			this.<String>getColumnOriginalValue("colorTheme"));
+		carouselItemsDashboardImpl.setInstanceCategoryFk(
+			this.<Long>getColumnOriginalValue("instanceCategoryFk"));
 		carouselItemsDashboardImpl.setPriority(
 			this.<String>getColumnOriginalValue("priority"));
 		carouselItemsDashboardImpl.setTitle(
@@ -946,6 +974,9 @@ public class CarouselItemsDashboardModelImpl
 			carouselItemsDashboardCacheModel.colorTheme = null;
 		}
 
+		carouselItemsDashboardCacheModel.instanceCategoryFk =
+			getInstanceCategoryFk();
+
 		carouselItemsDashboardCacheModel.priority = getPriority();
 
 		String priority = carouselItemsDashboardCacheModel.priority;
@@ -1037,6 +1068,7 @@ public class CarouselItemsDashboardModelImpl
 	private boolean _setModifiedDate;
 	private String _category;
 	private String _colorTheme;
+	private long _instanceCategoryFk;
 	private String _priority;
 	private String _title;
 
@@ -1082,6 +1114,7 @@ public class CarouselItemsDashboardModelImpl
 		_columnOriginalValues.put("modifiedDate", _modifiedDate);
 		_columnOriginalValues.put("category", _category);
 		_columnOriginalValues.put("colorTheme", _colorTheme);
+		_columnOriginalValues.put("instanceCategoryFk", _instanceCategoryFk);
 		_columnOriginalValues.put("priority", _priority);
 		_columnOriginalValues.put("title", _title);
 	}
@@ -1131,9 +1164,11 @@ public class CarouselItemsDashboardModelImpl
 
 		columnBitmasks.put("colorTheme", 2048L);
 
-		columnBitmasks.put("priority", 4096L);
+		columnBitmasks.put("instanceCategoryFk", 4096L);
 
-		columnBitmasks.put("title", 8192L);
+		columnBitmasks.put("priority", 8192L);
+
+		columnBitmasks.put("title", 16384L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

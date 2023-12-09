@@ -37,6 +37,42 @@ public class CarouselItemsDashboardServiceWrapper
 		_carouselItemsDashboardService = carouselItemsDashboardService;
 	}
 
+	@Override
+	public void addNewCarouselItem(
+			com.streaming.model.CarouselItemsDashboard carouselItemsDashboard,
+			long groupId,
+			com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay)
+		throws com.streaming.exception.CarouselInvalidFieldItemException,
+			   com.streaming.exception.CarouselItemNotAllowedException,
+			   com.streaming.exception.CarouselItemNotFoundException {
+
+		_carouselItemsDashboardService.addNewCarouselItem(
+			carouselItemsDashboard, groupId, themeDisplay);
+	}
+
+	@Override
+	public void deleteCarouselItemById(
+		long categoryId, long groupId,
+		com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay) {
+
+		_carouselItemsDashboardService.deleteCarouselItemById(
+			categoryId, groupId, themeDisplay);
+	}
+
+	@Override
+	public void getCarouselItemById(long categoryId, long groupId) {
+		_carouselItemsDashboardService.getCarouselItemById(categoryId, groupId);
+	}
+
+	@Override
+	public void getCarouselItemById(
+		long categoryId, long groupId,
+		com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay) {
+
+		_carouselItemsDashboardService.getCarouselItemById(
+			categoryId, groupId, themeDisplay);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
