@@ -41,7 +41,6 @@ import java.util.*;
 public class StreamingPortletHelper {
 
     public static List<CategoriesModel> getCategories(String vocabularyName) {
-
         List<AssetVocabulary> vocabularies =
                 AssetVocabularyLocalServiceUtil.getAssetVocabularies(-1, -1);
 
@@ -80,8 +79,9 @@ public class StreamingPortletHelper {
             });
         }
         else {
-            List<AssetCategory> categoriesList = AssetCategoryLocalServiceUtil
-                    .getVocabularyCategories(categoryId, -1, -1, null);
+            List<AssetCategory> categoriesList =
+                    AssetCategoryLocalServiceUtil.getVocabularyCategories(
+                            categoryId, -1, -1, null);
 
             categoriesList.parallelStream().forEach(cat -> {
                 CategoriesModel categoriesModel = new CategoriesModel();
