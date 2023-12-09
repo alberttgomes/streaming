@@ -26,6 +26,7 @@
 
 		<column name="category" type="String" />
 		<column name="colorTheme" type="String" />
+		<column name="instanceCategoryFk" type="long" />
 		<column name="priority" type="String" />
 		<column name="title" type="String" />
 
