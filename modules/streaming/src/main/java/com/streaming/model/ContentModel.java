@@ -1,9 +1,11 @@
 package com.streaming.model;
 
+import com.liferay.portal.kernel.util.StringBundler;
+
 /**
  * @author Albert Gomes Cabral
  */
-public class CarouselContentModel {
+public class CarouselContentModel <T> {
 
     public String getCategory() {
         return _category;
@@ -73,8 +75,9 @@ public class CarouselContentModel {
 
     @Override
     public String toString() {
-        return "{color: \"#" +  _color + "\", date: \"" + _date +
-                "\", description: \"" + _description + "\", urlFileEntry: \"" + _fileEntry + "\", title: \"" + _title + "\"}";
+        return StringBundler.concat(
+                "{color: \"#", _color, "\", date: \"" , _date,
+                "\", description: \"", _description, "\", urlFileEntry: \"",
+                _fileEntry, "\", title: \"", _title,  "\"}");
     }
-
 }
