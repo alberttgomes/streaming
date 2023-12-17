@@ -88,4 +88,26 @@ Liferay DXP's portlet and services, such as:
         "mvc.command.name=/streaming/edit_entry"
     }
   )
-  ``` 
+  ```
+  
+  ## MVC Render Commands
+  
+  - Handle the portlet render phase
+  - Call the MVC command component by setting the **mvcRenderCommandName** parameter
+  
+  ```
+  <portlet:renderURL var="viewEntryUrl">
+    <portlet:param name="mvcRenderCommandName" value="/my_portlet/view_entry" />
+    <portlet:param name"entryId" value"<%= String.valueOf(entry.getEntryId()) %> />
+  </portlet:renderURL>
+  
+  <a href="<%= viewEntryUrl"> Click Here </a>  
+  ```
+  
+# How to implement the Main View Objectives
+
+- Implement the JSP files
+- Implement the MVC render command for showing the Assignment list
+- Implement the MVC Render command for showing a single Assignment
+- Implement the back-end class for the UI management toolbar
+- Test the user interface
