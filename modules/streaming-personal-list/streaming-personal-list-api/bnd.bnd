@@ -1,0 +1,10 @@
+Bundle-Name: streaming-personal-list-api
+Bundle-SymbolicName: com.streaming.personal.list.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.streaming.personal.list.exception,\
+	com.streaming.personal.list.model,\
+	com.streaming.personal.list.service,\
+	com.streaming.personal.list.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../streaming-personal-list-service/service.xml

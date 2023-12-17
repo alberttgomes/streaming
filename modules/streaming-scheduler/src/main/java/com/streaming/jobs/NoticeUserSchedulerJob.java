@@ -35,7 +35,7 @@ public class NewsNotificationSchedulerJob implements SchedulerJobConfiguration {
                     _DEFAULT_CRON_EXPRESSION);
         }
         return TriggerConfiguration.createTriggerConfiguration(
-                5, TimeUnit.MINUTE);
+                1, TimeUnit.MINUTE);
     }
 
     private static final String _DEFAULT_CRON_EXPRESSION = "0 */2 * ? * *";
