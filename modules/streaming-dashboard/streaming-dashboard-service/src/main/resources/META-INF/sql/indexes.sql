@@ -1,4 +1,4 @@
-create unique index IX_33765D0E on STG-CarouselItemsDashboard (externalReferenceCode[$COLUMN_LENGTH:75$], groupId);
-create index IX_FF708236 on STG-CarouselItemsDashboard (groupId, categoryId);
-create index IX_F15C28B5 on STG-CarouselItemsDashboard (uuid_[$COLUMN_LENGTH:75$], companyId);
-create unique index IX_59D15877 on STG-CarouselItemsDashboard (uuid_[$COLUMN_LENGTH:75$], groupId);
+create unique index IX_2898B72D on STGCarouselItemsDashboard (externalReferenceCode[$COLUMN_LENGTH:75$], groupId);
+create index IX_B9614577 on STGCarouselItemsDashboard (groupId, categoryId);
+create index IX_639F1514 on STGCarouselItemsDashboard (uuid_[$COLUMN_LENGTH:75$], companyId);
+create unique index IX_EA51D096 on STGCarouselItemsDashboard (uuid_[$COLUMN_LENGTH:75$], groupId);

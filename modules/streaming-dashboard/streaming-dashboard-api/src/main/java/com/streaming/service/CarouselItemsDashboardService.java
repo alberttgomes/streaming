@@ -24,10 +24,11 @@ import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 
-import com.streaming.exception.CarouselInvalidFieldItemException;
-import com.streaming.exception.CarouselItemNotAllowedException;
-import com.streaming.exception.CarouselItemNotFoundException;
+import com.streaming.exception.*;
 import com.streaming.model.CarouselItemsDashboard;
+
+import java.util.Date;
+import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -55,20 +56,28 @@ public interface CarouselItemsDashboardService extends BaseService {
 	 * Never modify this interface directly. Add custom service methods to <code>com.streaming.service.impl.CarouselItemsDashboardServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface. Consume the carousel items dashboard remote service via injection or a <code>org.osgi.util.tracker.ServiceTracker</code>. Use {@link CarouselItemsDashboardServiceUtil} if injection and service tracking are not available.
 	 */
 	public void addNewCarouselItem(
-			CarouselItemsDashboard carouselItemsDashboard, long groupId,
-			ThemeDisplay themeDisplay)
+			long mvccVersion, String uuid, String externalReferenceCode,
+			long categoryId, long groupId, long companyId, String userName,
+			Date createDate, Date modifiedDate, String category,
+			String colorTheme, long instanceCategoryFk, String priority,
+			String title, ThemeDisplay themeDisplay)
 		throws CarouselInvalidFieldItemException,
 			   CarouselItemNotAllowedException, CarouselItemNotFoundException;
 
 	public void deleteCarouselItemById(
-		long categoryId, long groupId, ThemeDisplay themeDisplay);
+			long categoryId, long groupId, ThemeDisplay themeDisplay)
+		throws NoSuchCarouselItemsDashboardException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public void getCarouselItemById(long categoryId, long groupId);
+	public CarouselItemsDashboard getCarouselItemById(
+			long categoryId, long groupId, ThemeDisplay themeDisplay)
+		throws CarouselItemNotAllowedException,
+			   NoSuchCarouselItemsDashboardException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public void getCarouselItemById(
-		long categoryId, long groupId, ThemeDisplay themeDisplay);
+	public List<CarouselItemsDashboard> getCarouselItemsList(long groupId)
+		throws CarouselDashboardManagerNotFoundException,
+			   CarouselItemDashboardException;
 
 	/**
 	 * Returns the OSGi service identifier.
@@ -76,5 +85,11 @@ public interface CarouselItemsDashboardService extends BaseService {
 	 * @return the OSGi service identifier
 	 */
 	public String getOSGiServiceIdentifier();
+
+	public CarouselItemsDashboard updateCarouselItemById(
+			long categoryId, long groupId, String userName, String category,
+			String colorTheme, String priority, String title)
+		throws CarouselDashboardManagerNotFoundException,
+			   CarouselItemDashboardException;
 
 }

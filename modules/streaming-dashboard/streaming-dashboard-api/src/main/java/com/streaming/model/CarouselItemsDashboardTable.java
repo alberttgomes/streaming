@@ -22,7 +22,7 @@ import java.sql.Types;
 import java.util.Date;
 
 /**
- * The table class for the &quot;STG-CarouselItemsDashboard&quot; database table.
+ * The table class for the &quot;STGCarouselItemsDashboard&quot; database table.
  *
  * @author Brian Wing Shun Chan
  * @see CarouselItemsDashboard
@@ -79,7 +79,7 @@ public class CarouselItemsDashboardTable
 		createColumn("title", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 
 	private CarouselItemsDashboardTable() {
-		super("STG-CarouselItemsDashboard", CarouselItemsDashboardTable::new);
+		super("STGCarouselItemsDashboard", CarouselItemsDashboardTable::new);
 	}
 
 }

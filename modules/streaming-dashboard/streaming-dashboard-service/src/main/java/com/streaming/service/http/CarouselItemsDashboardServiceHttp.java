@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.service.http.TunnelUtil;
 import com.liferay.portal.kernel.util.MethodHandler;
 import com.liferay.portal.kernel.util.MethodKey;
 
+import com.streaming.exception.*;
 import com.streaming.service.CarouselItemsDashboardServiceUtil;
 
 /**
@@ -52,13 +53,14 @@ import com.streaming.service.CarouselItemsDashboardServiceUtil;
 public class CarouselItemsDashboardServiceHttp {
 
 	public static void addNewCarouselItem(
-			HttpPrincipal httpPrincipal,
-			com.streaming.model.CarouselItemsDashboard carouselItemsDashboard,
-			long groupId,
+			HttpPrincipal httpPrincipal, long mvccVersion, String uuid,
+			String externalReferenceCode, long categoryId, long groupId,
+			long companyId, String userName, java.util.Date createDate,
+			java.util.Date modifiedDate, String category, String colorTheme,
+			long instanceCategoryFk, String priority, String title,
 			com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay)
-		throws com.streaming.exception.CarouselInvalidFieldItemException,
-			   com.streaming.exception.CarouselItemNotAllowedException,
-			   com.streaming.exception.CarouselItemNotFoundException {
+		throws CarouselInvalidFieldItemException,
+			CarouselItemNotAllowedException, CarouselItemNotFoundException {
 
 		try {
 			MethodKey methodKey = new MethodKey(
@@ -66,33 +68,25 @@ public class CarouselItemsDashboardServiceHttp {
 				_addNewCarouselItemParameterTypes0);
 
 			MethodHandler methodHandler = new MethodHandler(
-				methodKey, carouselItemsDashboard, groupId, themeDisplay);
+				methodKey, mvccVersion, uuid, externalReferenceCode, categoryId,
+				groupId, companyId, userName, createDate, modifiedDate,
+				category, colorTheme, instanceCategoryFk, priority, title,
+				themeDisplay);
 
 			try {
 				TunnelUtil.invoke(httpPrincipal, methodHandler);
 			}
 			catch (Exception exception) {
-				if (exception instanceof
-						com.streaming.exception.
-							CarouselItemNotAllowedException) {
-
-					throw (com.streaming.exception.
-						CarouselItemNotAllowedException)exception;
+				if (exception instanceof CarouselItemNotAllowedException) {
+					throw (CarouselItemNotAllowedException)exception;
 				}
 
-				if (exception instanceof
-						com.streaming.exception.
-							CarouselInvalidFieldItemException) {
-
-					throw (com.streaming.exception.
-						CarouselInvalidFieldItemException)exception;
+				if (exception instanceof CarouselInvalidFieldItemException) {
+					throw (CarouselInvalidFieldItemException)exception;
 				}
 
-				if (exception instanceof
-						com.streaming.exception.CarouselItemNotFoundException) {
-
-					throw (com.streaming.exception.
-						CarouselItemNotFoundException)exception;
+				if (exception instanceof CarouselItemNotFoundException) {
+					throw (CarouselItemNotFoundException)exception;
 				}
 
 				throw new com.liferay.portal.kernel.exception.SystemException(
@@ -109,8 +103,9 @@ public class CarouselItemsDashboardServiceHttp {
 	}
 
 	public static void deleteCarouselItemById(
-		HttpPrincipal httpPrincipal, long categoryId, long groupId,
-		com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay) {
+			HttpPrincipal httpPrincipal, long categoryId, long groupId,
+			com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay)
+		throws NoSuchCarouselItemsDashboardException {
 
 		try {
 			MethodKey methodKey = new MethodKey(
@@ -125,6 +120,12 @@ public class CarouselItemsDashboardServiceHttp {
 				TunnelUtil.invoke(httpPrincipal, methodHandler);
 			}
 			catch (Exception exception) {
+				if (exception instanceof
+						NoSuchCarouselItemsDashboardException) {
+
+					throw (NoSuchCarouselItemsDashboardException)exception;
+				}
+
 				throw new com.liferay.portal.kernel.exception.SystemException(
 					exception);
 			}
@@ -138,9 +139,12 @@ public class CarouselItemsDashboardServiceHttp {
 		}
 	}
 
-	public static void getCarouselItemById(
-		HttpPrincipal httpPrincipal, long categoryId, long groupId,
-		com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay) {
+	public static com.streaming.model.CarouselItemsDashboard
+			getCarouselItemById(
+				HttpPrincipal httpPrincipal, long categoryId, long groupId,
+				com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay)
+		throws CarouselItemNotAllowedException,
+			   NoSuchCarouselItemsDashboardException {
 
 		try {
 			MethodKey methodKey = new MethodKey(
@@ -150,13 +154,27 @@ public class CarouselItemsDashboardServiceHttp {
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, categoryId, groupId, themeDisplay);
 
+			Object returnObj = null;
+
 			try {
-				TunnelUtil.invoke(httpPrincipal, methodHandler);
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
 			}
 			catch (Exception exception) {
+				if (exception instanceof
+						NoSuchCarouselItemsDashboardException) {
+
+					throw (NoSuchCarouselItemsDashboardException)exception;
+				}
+
+				if (exception instanceof CarouselItemNotAllowedException) {
+					throw (CarouselItemNotAllowedException)exception;
+				}
+
 				throw new com.liferay.portal.kernel.exception.SystemException(
 					exception);
 			}
+
+			return (com.streaming.model.CarouselItemsDashboard)returnObj;
 		}
 		catch (com.liferay.portal.kernel.exception.SystemException
 					systemException) {
@@ -167,24 +185,89 @@ public class CarouselItemsDashboardServiceHttp {
 		}
 	}
 
-	public static void getCarouselItemById(
-		HttpPrincipal httpPrincipal, long categoryId, long groupId) {
+	public static java.util.List<com.streaming.model.CarouselItemsDashboard>
+			getCarouselItemsList(HttpPrincipal httpPrincipal, long groupId)
+		throws CarouselDashboardManagerNotFoundException,
+			   CarouselItemDashboardException {
 
 		try {
 			MethodKey methodKey = new MethodKey(
-				CarouselItemsDashboardServiceUtil.class, "getCarouselItemById",
-				_getCarouselItemByIdParameterTypes3);
+				CarouselItemsDashboardServiceUtil.class, "getCarouselItemsList",
+				_getCarouselItemsListParameterTypes3);
 
-			MethodHandler methodHandler = new MethodHandler(
-				methodKey, categoryId, groupId);
+			MethodHandler methodHandler = new MethodHandler(methodKey, groupId);
+
+			Object returnObj = null;
 
 			try {
-				TunnelUtil.invoke(httpPrincipal, methodHandler);
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
 			}
 			catch (Exception exception) {
+				if (exception instanceof
+						CarouselDashboardManagerNotFoundException) {
+
+					throw (CarouselDashboardManagerNotFoundException)exception;
+				}
+
+				if (exception instanceof CarouselItemDashboardException) {
+					throw (CarouselItemDashboardException)exception;
+				}
+
 				throw new com.liferay.portal.kernel.exception.SystemException(
 					exception);
 			}
+
+			return (java.util.List<com.streaming.model.CarouselItemsDashboard>)
+				returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
+	public static com.streaming.model.CarouselItemsDashboard
+			updateCarouselItemById(
+				HttpPrincipal httpPrincipal, long categoryId, long groupId,
+				String userName, String category, String colorTheme,
+				String priority, String title)
+		throws CarouselDashboardManagerNotFoundException,
+			   CarouselItemDashboardException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				CarouselItemsDashboardServiceUtil.class,
+				"updateCarouselItemById",
+				_updateCarouselItemByIdParameterTypes4);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, categoryId, groupId, userName, category, colorTheme,
+				priority, title);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						CarouselDashboardManagerNotFoundException) {
+
+					throw (CarouselDashboardManagerNotFoundException)exception;
+				}
+
+				if (exception instanceof CarouselItemDashboardException) {
+					throw (CarouselItemDashboardException)exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+
+			return (com.streaming.model.CarouselItemsDashboard)returnObj;
 		}
 		catch (com.liferay.portal.kernel.exception.SystemException
 					systemException) {
@@ -200,7 +283,10 @@ public class CarouselItemsDashboardServiceHttp {
 
 	private static final Class<?>[] _addNewCarouselItemParameterTypes0 =
 		new Class[] {
-			com.streaming.model.CarouselItemsDashboard.class, long.class,
+			long.class, String.class, String.class, long.class, long.class,
+			long.class, String.class, java.util.Date.class,
+			java.util.Date.class, String.class, String.class, long.class,
+			String.class, String.class,
 			com.liferay.portal.kernel.theme.ThemeDisplay.class
 		};
 	private static final Class<?>[] _deleteCarouselItemByIdParameterTypes1 =
@@ -213,7 +299,12 @@ public class CarouselItemsDashboardServiceHttp {
 			long.class, long.class,
 			com.liferay.portal.kernel.theme.ThemeDisplay.class
 		};
-	private static final Class<?>[] _getCarouselItemByIdParameterTypes3 =
-		new Class[] {long.class, long.class};
+	private static final Class<?>[] _getCarouselItemsListParameterTypes3 =
+		new Class[] {long.class};
+	private static final Class<?>[] _updateCarouselItemByIdParameterTypes4 =
+		new Class[] {
+			long.class, long.class, String.class, String.class, String.class,
+			String.class, String.class
+		};
 
 }

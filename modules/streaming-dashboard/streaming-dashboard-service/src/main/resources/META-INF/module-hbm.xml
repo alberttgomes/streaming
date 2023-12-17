@@ -3,7 +3,7 @@
 
 <hibernate-mapping auto-import="false" default-lazy="false">
 	<import class="com.streaming.model.CarouselItemsDashboard" />
-	<class dynamic-update="true" name="com.streaming.model.impl.CarouselItemsDashboardImpl" table="STG-CarouselItemsDashboard">
+	<class dynamic-update="true" name="com.streaming.model.impl.CarouselItemsDashboardImpl" table="STGCarouselItemsDashboard">
 		<id access="com.liferay.portal.dao.orm.hibernate.LiferayPropertyAccessor" name="categoryId" type="long">
 			<generator class="assigned" />
 		</id>

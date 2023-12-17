@@ -1,4 +1,4 @@
-create table STG-CarouselItemsDashboard (
+create table STGCarouselItemsDashboard (
 	mvccVersion LONG default 0 not null,
 	uuid_ VARCHAR(75) null,
 	externalReferenceCode VARCHAR(75) null,

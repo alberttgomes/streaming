@@ -14,7 +14,10 @@
 
 package com.streaming.service;
 
+import com.streaming.exception.*;
 import com.streaming.model.CarouselItemsDashboard;
+
+import java.util.List;
 
 /**
  * Provides the remote service utility for CarouselItemsDashboard. This utility wraps
@@ -36,32 +39,45 @@ public class CarouselItemsDashboardServiceUtil {
 	 * Never modify this class directly. Add custom service methods to <code>com.streaming.service.impl.CarouselItemsDashboardServiceImpl</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static void addNewCarouselItem(
-			CarouselItemsDashboard carouselItemsDashboard, long groupId,
+			long mvccVersion, String uuid, String externalReferenceCode,
+			long categoryId, long groupId, long companyId, String userName,
+			java.util.Date createDate, java.util.Date modifiedDate,
+			String category, String colorTheme, long instanceCategoryFk,
+			String priority, String title,
 			com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay)
-		throws com.streaming.exception.CarouselInvalidFieldItemException,
-			   com.streaming.exception.CarouselItemNotAllowedException,
-			   com.streaming.exception.CarouselItemNotFoundException {
+		throws CarouselInvalidFieldItemException,
+			CarouselItemNotAllowedException, CarouselItemNotFoundException {
 
 		getService().addNewCarouselItem(
-			carouselItemsDashboard, groupId, themeDisplay);
+			mvccVersion, uuid, externalReferenceCode, categoryId, groupId,
+			companyId, userName, createDate, modifiedDate, category, colorTheme,
+			instanceCategoryFk, priority, title, themeDisplay);
 	}
 
 	public static void deleteCarouselItemById(
-		long categoryId, long groupId,
-		com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay) {
+			long categoryId, long groupId,
+			com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay)
+		throws NoSuchCarouselItemsDashboardException {
 
 		getService().deleteCarouselItemById(categoryId, groupId, themeDisplay);
 	}
 
-	public static void getCarouselItemById(long categoryId, long groupId) {
-		getService().getCarouselItemById(categoryId, groupId);
+	public static CarouselItemsDashboard getCarouselItemById(
+			long categoryId, long groupId,
+			com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay)
+		throws CarouselItemNotAllowedException,
+			   NoSuchCarouselItemsDashboardException {
+
+		return getService().getCarouselItemById(
+			categoryId, groupId, themeDisplay);
 	}
 
-	public static void getCarouselItemById(
-		long categoryId, long groupId,
-		com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay) {
+	public static List<CarouselItemsDashboard> getCarouselItemsList(
+			long groupId)
+		throws CarouselDashboardManagerNotFoundException,
+			   CarouselItemDashboardException {
 
-		getService().getCarouselItemById(categoryId, groupId, themeDisplay);
+		return getService().getCarouselItemsList(groupId);
 	}
 
 	/**
@@ -71,6 +87,17 @@ public class CarouselItemsDashboardServiceUtil {
 	 */
 	public static String getOSGiServiceIdentifier() {
 		return getService().getOSGiServiceIdentifier();
+	}
+
+	public static CarouselItemsDashboard updateCarouselItemById(
+			long categoryId, long groupId, String userName, String category,
+			String colorTheme, String priority, String title)
+		throws CarouselDashboardManagerNotFoundException,
+			   CarouselItemDashboardException {
+
+		return getService().updateCarouselItemById(
+			categoryId, groupId, userName, category, colorTheme, priority,
+			title);
 	}
 
 	public static CarouselItemsDashboardService getService() {

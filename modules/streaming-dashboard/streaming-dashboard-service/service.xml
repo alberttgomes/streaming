@@ -4,7 +4,7 @@
 <service-builder dependency-injector="ds" mvcc-enabled="true" package-path="com.streaming">
 	<namespace>CarouselItemsDashboard</namespace>
 	<!-- <entity data-source="sampleDataSource" local-service="true" name="Carousel" remote-service="false" session-factory="sampleSessionFactory" table="carousel" tx-manager="sampleTransactionManager uuid="true"">-->
-	<entity local-service="true" external-reference-code="group" name="CarouselItemsDashboard" remote-service="true" uuid="true"  table="STG-CarouselItemsDashboard">
+	<entity local-service="true" external-reference-code="group" name="CarouselItemsDashboard" remote-service="true" uuid="true"  table="STGCarouselItemsDashboard">
 
 		<!-- PK fields -->
 
