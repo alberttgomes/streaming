@@ -1,11 +1,11 @@
 package com.streaming.constants;
 
 /**
- * @author me
+ * @author Albert Gomes Cabral
  */
-public class streamingDashboadPortletKeys {
+public class StreamingDashboardPortletKeys {
 
-	public static final String STREAMINGDASHBOAD =
-		"com_streaming_StreamingDashboadPortlet";
+	public static final String STREAMING_DASHBOARD_PORTLET =
+		"com_streaming_dashboard_admin_portlet_StreamingDashboardPortlet";
 
 }
