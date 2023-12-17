@@ -127,8 +127,7 @@ public class StreamingPortletHelper {
                 docs = hits.toList();
             }
         }
-        catch (RuntimeException | ParseException |
-                 SearchException runtimeException) {
+        catch (RuntimeException | ParseException | SearchException runtimeException) {
             throw new RuntimeException(runtimeException);
         }
         return docs;
@@ -141,7 +140,7 @@ public class StreamingPortletHelper {
         Set<String> fields = new HashSet<String>();
 
         for (String name : fieldNames) {
-            fields.add(name + "=" +
+            fields.add(name + StringPool.EQUAL +
                     structure.getFieldDataType(name));
         }
         return fields;
@@ -220,5 +219,4 @@ public class StreamingPortletHelper {
 
     @Reference
     private static DLURLHelper _dlurlHelper;
-
 }
