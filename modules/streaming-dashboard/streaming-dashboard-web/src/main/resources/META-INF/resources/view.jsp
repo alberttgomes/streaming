@@ -10,11 +10,11 @@
 <div>
 
 <script>
-    let content = document.getElementsByClassName(
-        ".dashboard-content-item");
+    const content = document.getElementsByClassName(
+        ".dashboard-content-items");
 
-    let getDashboard = '${get-dashboard}';
-    let saveDashboard = '${save-dashboard}';
+    const getDashboard = '${get-dashboard}';
+    const saveDashboard = '${save-dashboard}';
 
     let contentList = new ArrayList();
 
@@ -52,6 +52,7 @@
                             '</div>' +
                         '</div>'
                     );
+                    contentList.add(content);
             })
             .catch((error) => {
                 console.log(error);
