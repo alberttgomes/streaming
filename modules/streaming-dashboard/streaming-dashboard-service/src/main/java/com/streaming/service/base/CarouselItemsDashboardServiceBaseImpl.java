@@ -27,7 +27,7 @@ import com.liferay.portal.kernel.service.BaseServiceImpl;
 import com.liferay.portal.kernel.util.PortalUtil;
 
 import com.streaming.model.CarouselItemsDashboard;
-import com.streaming.service.CarouselItemsDashboardService;
+import com.streaming.service.StreamingDashboardCarouselManagerService;
 import com.streaming.service.CarouselItemsDashboardServiceUtil;
 import com.streaming.service.persistence.CarouselItemsDashboardPersistence;
 
@@ -51,7 +51,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 public abstract class CarouselItemsDashboardServiceBaseImpl
 	extends BaseServiceImpl
-	implements AopService, CarouselItemsDashboardService,
+	implements AopService, StreamingDashboardCarouselManagerService,
 			   IdentifiableOSGiService {
 
 	/*
@@ -67,13 +67,13 @@ public abstract class CarouselItemsDashboardServiceBaseImpl
 	@Override
 	public Class<?>[] getAopInterfaces() {
 		return new Class<?>[] {
-			CarouselItemsDashboardService.class, IdentifiableOSGiService.class
+			StreamingDashboardCarouselManagerService.class, IdentifiableOSGiService.class
 		};
 	}
 
 	@Override
 	public void setAopProxy(Object aopProxy) {
-		carouselItemsDashboardService = (CarouselItemsDashboardService)aopProxy;
+		carouselItemsDashboardService = (StreamingDashboardCarouselManagerService)aopProxy;
 
 		_setServiceUtilService(carouselItemsDashboardService);
 	}
@@ -85,7 +85,7 @@ public abstract class CarouselItemsDashboardServiceBaseImpl
 	 */
 	@Override
 	public String getOSGiServiceIdentifier() {
-		return CarouselItemsDashboardService.class.getName();
+		return StreamingDashboardCarouselManagerService.class.getName();
 	}
 
 	protected Class<?> getModelClass() {
@@ -122,7 +122,7 @@ public abstract class CarouselItemsDashboardServiceBaseImpl
 	}
 
 	private void _setServiceUtilService(
-		CarouselItemsDashboardService carouselItemsDashboardService) {
+		StreamingDashboardCarouselManagerService carouselItemsDashboardService) {
 
 		try {
 			Field field =
@@ -142,7 +142,7 @@ public abstract class CarouselItemsDashboardServiceBaseImpl
 	protected com.streaming.service.CarouselItemsDashboardLocalService
 		carouselItemsDashboardLocalService;
 
-	protected CarouselItemsDashboardService carouselItemsDashboardService;
+	protected StreamingDashboardCarouselManagerService carouselItemsDashboardService;
 
 	@Reference
 	protected CarouselItemsDashboardPersistence

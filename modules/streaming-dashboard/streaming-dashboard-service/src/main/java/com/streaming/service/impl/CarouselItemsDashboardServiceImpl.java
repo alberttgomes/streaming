@@ -19,19 +19,20 @@ import com.liferay.asset.kernel.service.AssetCategoryLocalServiceUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.StringBundler;
-import com.streaming.exception.CarouselInvalidFieldItemException;
-import com.streaming.exception.CarouselItemNotAllowedException;
-import com.streaming.exception.CarouselItemNotFoundException;
+import com.streaming.exception.*;
 import com.streaming.model.CarouselItemsDashboard;
-import com.streaming.service.CarouselItemsDashboardService;
+import com.streaming.service.StreamingDashboardCarouselManagerService;
 import com.streaming.service.base.CarouselItemsDashboardServiceBaseImpl;
 
 import com.streaming.service.impl.util.PrioritiesEnum;
 import org.osgi.service.component.annotations.Component;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -46,14 +47,33 @@ import java.util.List;
 	},
 	service = AopService.class
 )
-public class CarouselItemsDashboardServiceImpl extends CarouselItemsDashboardServiceBaseImpl
-		implements CarouselItemsDashboardService {
+public class CarouselItemsDashboardServiceImpl
+		extends CarouselItemsDashboardServiceBaseImpl implements StreamingDashboardCarouselManagerService {
 	@Override
 	public void addNewCarouselItem(
-			CarouselItemsDashboard carouselItemsDashboard, long groupId, ThemeDisplay themeDisplay)
-				throws CarouselItemNotAllowedException, CarouselInvalidFieldItemException, CarouselItemNotFoundException {
+			long mvccVersion, String uuid, String externalReferenceCode, long categoryId,
+			long groupId, long companyId, String userName, Date createDate, Date modifiedDate,
+			String category, String colorTheme, long instanceCategoryFk, String priority,
+			String title, ThemeDisplay themeDisplay)
+		throws CarouselItemNotAllowedException, CarouselInvalidFieldItemException,
+			CarouselItemNotFoundException {
 
-		boolean valid = _validRulesCarouselFieldsBefore(carouselItemsDashboard);
+		_carouselItemsDashboard.setMvccVersion(mvccVersion);
+		_carouselItemsDashboard.setUuid(uuid);
+		_carouselItemsDashboard.setExternalReferenceCode(externalReferenceCode);
+		_carouselItemsDashboard.setCategoryId(categoryId);
+		_carouselItemsDashboard.setGroupId(groupId);
+		_carouselItemsDashboard.setCompanyId(companyId);
+		_carouselItemsDashboard.setUserName(userName);
+		_carouselItemsDashboard.setCreateDate(createDate);
+		_carouselItemsDashboard.setModifiedDate(modifiedDate);
+		_carouselItemsDashboard.setCategory(category);
+		_carouselItemsDashboard.setColorTheme(colorTheme);
+		_carouselItemsDashboard.setInstanceCategoryFk(instanceCategoryFk);
+		_carouselItemsDashboard.setPriority(priority);
+		_carouselItemsDashboard.setTitle(title);
+
+		boolean valid = _validRulesCarouselFieldsBefore(_carouselItemsDashboard);
 
 		if (valid) {
 			valid = _validRulesForUsersPermissions(groupId, themeDisplay);
@@ -61,31 +81,25 @@ public class CarouselItemsDashboardServiceImpl extends CarouselItemsDashboardSer
 			if (valid) {
 				_log.info("User and rules checked with success");
 
-				// Convert priority to pattern in the @PrioritiesEnum if necessary
-				for (String value : PrioritiesEnum.valuesArray()) {
-					if (carouselItemsDashboard.getPriority().equals(value)) {
-						break;
-					}
-					else {
-						String priorityUpperCase =
-								carouselItemsDashboard.getPriority().toUpperCase();
-
-						carouselItemsDashboard.setPriority(
-								priorityUpperCase + "_PRIORITY");
-					}
+				if (_carouselItemsDashboard.getCategory().isEmpty()) {
+					_prioritiesEnum = PrioritiesEnum.LOW_PRIORITY;
+				}
+				else {
+					_prioritiesEnum = PrioritiesEnum.valueOf(
+							_carouselItemsDashboard.getCategory());
 				}
 
 				long categoryInstanceId = _createInstanceAssetCategory(
-						carouselItemsDashboard.getCategory());
+						_carouselItemsDashboard.getCategory());
 
 				if (categoryInstanceId > 0) {
 					carouselItemsDashboardLocalService.addCarouselItemsDashboard(
-							carouselItemsDashboard);
+							_carouselItemsDashboard);
 				}
 				else {
 					throw new CarouselItemNotFoundException(
 							"Category instance not found " +
-									carouselItemsDashboard.getCategory());
+									_carouselItemsDashboard.getCategory());
 				}
 			}
 			else {
@@ -103,19 +117,60 @@ public class CarouselItemsDashboardServiceImpl extends CarouselItemsDashboardSer
 
 	@Override
 	public void deleteCarouselItemById(
-			long categoryId, long groupId, ThemeDisplay themeDisplay) {
+			long categoryId, long groupId, ThemeDisplay themeDisplay)
+				throws NoSuchCarouselItemsDashboardException {
+		boolean hasPermission = _validRulesForUsersPermissions(
+				groupId, themeDisplay);
 
+		if (!hasPermission) {
+			return;
+		}
+
+		if (carouselItemsDashboardPersistence.fetchByDeleteCarouselItems(
+				groupId, categoryId, false) != null) {
+			carouselItemsDashboardPersistence.removeByDeleteCarouselItems(
+					groupId, categoryId);
+		}
+		else {
+			_log.warn("Content wasn't found with the primary key " +
+					categoryId);
+		}
 	}
 
 	@Override
-	public void getCarouselItemById(long categoryId, long groupId, ThemeDisplay themeDisplay) {
+	public CarouselItemsDashboard getCarouselItemById(
+			long categoryId, long groupId, ThemeDisplay themeDisplay)
+		throws NoSuchCarouselItemsDashboardException, CarouselItemNotAllowedException {
+		boolean hasPermission = _validRulesForUsersPermissions(
+				groupId, themeDisplay);
 
+		CarouselItemsDashboard carouselItemsDashboard;
+
+		if (hasPermission) {
+			carouselItemsDashboard =
+					carouselItemsDashboardPersistence.findByGetCarouselItemById(
+							groupId, categoryId);
+		}
+		else {
+			throw new CarouselItemNotAllowedException(
+					"Check your user account and rules to see this content.");
+		}
+		return carouselItemsDashboard;
 	}
 
 	@Override
-	public void getCarouselItemById(long categoryId, long groupId) {
-
+	public List<CarouselItemsDashboard> getCarouselItemsList(long groupId)
+			throws CarouselDashboardManagerNotFoundException, CarouselItemDashboardException {
+		return null;
 	}
+
+	@Override
+	public CarouselItemsDashboard updateCarouselItemById(
+			long categoryId, long groupId,  String userName, String category,
+			String colorTheme, String priority, String title)
+		throws CarouselDashboardManagerNotFoundException, CarouselItemDashboardException {
+		return null;
+	};
 
 	private long _createInstanceAssetCategory(String categoryName) {
 		List<AssetCategory> categories =
@@ -170,4 +225,10 @@ public class CarouselItemsDashboardServiceImpl extends CarouselItemsDashboardSer
 		}
 		return checkGroupAndPermission;
 	}
+
+	private CarouselItemsDashboard _carouselItemsDashboard;
+	private PrioritiesEnum _prioritiesEnum;
+
+	private static final Log _log = LogFactoryUtil.getLog(
+			CarouselItemsDashboardServiceImpl.class);
 }

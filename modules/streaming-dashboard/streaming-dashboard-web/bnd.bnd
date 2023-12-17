@@ -2,3 +2,5 @@ Bundle-Name: streaming-dashboard-web
 Bundle-SymbolicName: com.streaming
 Bundle-Version: 1.0.0
 Export-Package: com.streaming.constants
+Import-Package: \
+    com.streaming.model
