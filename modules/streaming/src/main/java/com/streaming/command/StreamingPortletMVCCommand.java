@@ -3,6 +3,7 @@ package com.streaming.command;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCCommand;
 import com.streaming.service.StreamingService;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -17,7 +18,7 @@ import java.time.Instant;
         },
         service = StreamingPortletMVCCommand.class
 )
-public class StreamingPortletMVCCommand {
+public class StreamingPortletMVCCommand implements MVCCommand {
     @Activate
     public void activePortletMVCommand()
             throws JsonProcessingException {

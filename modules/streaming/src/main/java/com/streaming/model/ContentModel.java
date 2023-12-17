@@ -5,7 +5,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 /**
  * @author Albert Gomes Cabral
  */
-public class CarouselContentModel <T> {
+public class ContentModel {
 
     public String getCategory() {
         return _category;

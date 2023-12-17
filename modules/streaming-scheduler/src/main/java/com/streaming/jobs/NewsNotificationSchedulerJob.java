@@ -30,16 +30,17 @@ public class NewsNotificationSchedulerJob implements SchedulerJobConfiguration {
 
     @Override
     public TriggerConfiguration getTriggerConfiguration() {
-        if (Validator.isNotNull(_cronExpression)) {
+        if (Validator.isNotNull(_DEFAULT_CRON_EXPRESSION)) {
             return TriggerConfiguration.createTriggerConfiguration(
-                    _cronExpression);
+                    _DEFAULT_CRON_EXPRESSION);
         }
         return TriggerConfiguration.createTriggerConfiguration(
-                3, TimeUnit.MINUTE);
+                5, TimeUnit.MINUTE);
     }
 
-    private static final String _cronExpression = "0 */2 * ? * *";
+    private static final String _DEFAULT_CRON_EXPRESSION = "0 */2 * ? * *";
 
-    private static final Log _log = LogFactoryUtil.getLog(NewsNotificationSchedulerJob.class);
+    private static final Log _log = LogFactoryUtil.getLog(
+            NewsNotificationSchedulerJob.class);
 
 }

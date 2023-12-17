@@ -21,7 +21,7 @@ import javax.portlet.RenderResponse;
 
 import com.streaming.constants.VocabularyCategoriesConstant;
 import com.streaming.helper.StreamingPortletHelper;
-import com.streaming.model.CarouselContentModel;
+import com.streaming.model.ContentModel;
 import com.streaming.model.CategoriesModel;
 import com.streaming.model.PreferencesPortletModel;
 import org.osgi.service.component.annotations.Component;
@@ -68,14 +68,18 @@ public class StreamingPortlet extends MVCPortlet {
 				group.getExternalReferenceCode();
 		long mvccVersion = group.getMvccVersion();
 
-		CarouselContentModel carouselContentModel =
-				new CarouselContentModel();
+		ContentModel contentModel = new ContentModel();
+
 		try {
 			PreferencesPortletModel preferencesPortletModel =
 					StreamingPortletHelper.setPreferencesModel(
 							companyId, groupId, mvccVersion, contact.getUserId(),
 							VocabularyCategoriesConstant.VOCABULARY_STREAMING_NAME,
 							externalReferenceCode, renderRequest);
+
+			if (preferencesPortletModel.getClass() != null) {
+				preferencesPortlet = preferencesPortletModel;
+			}
 
 			List<CategoriesModel> categoriesModel = StreamingPortletHelper.getCategories(
 					preferencesPortletModel.getVocabularyCategories());
@@ -94,7 +98,7 @@ public class StreamingPortlet extends MVCPortlet {
 				JournalArticle journalArticle =
 						JournalArticleLocalServiceUtil.getLatestArticle(groupId, articleId);
 
-				Set<String> fieldsName = StreamingPortletHelper.getFieldsByStructure(journalArticle);
+				Set<String> fieldsNames = StreamingPortletHelper.getFieldsByStructure(journalArticle);
 
 				String documentContent = journalArticle.getContentByLocale(
 						themeDisplay.getLanguageId());
@@ -110,56 +114,55 @@ public class StreamingPortlet extends MVCPortlet {
 				String fileEntry;
 				String title;
 
-				for (String values : fieldsName) {
+				for (String values : fieldsNames) {
 					String[] value = values.split("=");
 				    switch (value[0])  {
 						case "Text13771537":
 							title = StreamingPortletHelper.getFields(
-									carouselContentModel.getFieldSet(), value[0],themeDisplay, document);
-							carouselContentModel.setTitle(title);
+									contentModel.getFieldSet(), value[0],themeDisplay, document);
+							contentModel.setTitle(title);
 							map.put(value[0], title);
 							break;
 						case "RichText53999476":
 							description = StreamingPortletHelper.getFields(
-									carouselContentModel.getFieldSet(), value[0],themeDisplay, document);
-							carouselContentModel.setDescription(description);
+									contentModel.getFieldSet(), value[0],themeDisplay, document);
+							contentModel.setDescription(description);
 							map.put("rich-text", description);
 							break;
 						case "Image87907379":
 							fileEntry = StreamingPortletHelper.getFields(
-									carouselContentModel.getFieldSet(), value[0],themeDisplay, document);
-							carouselContentModel.setFileEntry(fileEntry);
+									contentModel.getFieldSet(), value[0],themeDisplay, document);
+							contentModel.setFileEntry(fileEntry);
 							map.put("image", fileEntry);
 							break;
 						case "Date63543359":
 							date = StreamingPortletHelper.getFields(
-									carouselContentModel.getFieldSet(), value[0], themeDisplay, document);
-							carouselContentModel.setDate(date);
+									contentModel.getFieldSet(), value[0], themeDisplay, document);
+							contentModel.setDate(date);
 							map.put("date", date);
 							break;
 						case "Color64500276":
 							color = StreamingPortletHelper.getFields(
-									carouselContentModel.getFieldSet(), value[0],themeDisplay, document);
-							carouselContentModel.setColor(color);
+									contentModel.getFieldSet(), value[0],themeDisplay, document);
+							contentModel.setColor(color);
 							map.put("color", color);
 							break;
 					}
 				}
-				_carouselRender.put("field_" + count, map);
+				carouselRender.put("field_" + count, map);
 			}
 		}
 		catch (PortalException | DocumentException exception) {
 			throw new PortletException(exception);
 		}
 		finally {
-			renderRequest.setAttribute("carouselJsonData", _carouselRender);
+			renderRequest.setAttribute("carouselJsonData", carouselRender);
 
 			super.doView(renderRequest, renderResponse);
 		}
 	}
 
-	private final Map<String, Object> _carouselRender = new LinkedHashMap<>();
-
+	protected PreferencesPortletModel preferencesPortlet = null;
+	protected final Map<String, Object> carouselRender = new LinkedHashMap<>();
 	private static final Log _log = LogFactoryUtil.getLog(StreamingPortlet.class);
-
 }
