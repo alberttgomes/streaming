@@ -16,7 +16,7 @@ services:
     
     liferay:
       image: streaming-portal/liferay
-      buid:
+      build:
         context: ./
         dockerfile: ./environment/liferay/Dockerfile
       ports:
@@ -34,5 +34,6 @@ services:
         - LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_URL=jdbc:mysql://database/streaminglportal?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false
         - LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_USERNAME=streaming_portal
         - LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_PASSWORD=test
+        - LIFERAY_UPGRADE_PERIOD_DATABASE_PERIOD_AUTO_PERIOD_RUN=true
       depends_on:
         - database
