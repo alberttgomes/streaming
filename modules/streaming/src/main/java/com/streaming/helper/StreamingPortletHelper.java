@@ -2,6 +2,7 @@ package com.streaming.helper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.asset.kernel.model.AssetVocabulary;
 import com.liferay.asset.kernel.service.AssetCategoryLocalServiceUtil;
@@ -27,13 +28,16 @@ import com.liferay.portal.kernel.search.generic.QueryTermImpl;
 import com.liferay.portal.kernel.search.generic.TermQueryImpl;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.xml.Node;
+
 import com.streaming.model.CategoriesModel;
 import com.streaming.model.PreferencesPortletModel;
-import org.osgi.service.component.annotations.Reference;
 
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import java.util.*;
+
+import org.osgi.service.component.annotations.Reference;
+
 
 /**
  * @author Albert Gomes Cabral
@@ -44,7 +48,7 @@ public class StreamingPortletHelper {
         List<AssetVocabulary> vocabularies =
                 AssetVocabularyLocalServiceUtil.getAssetVocabularies(-1, -1);
 
-        long categoryId = -1;
+        long categoryId = 0;
 
         for (AssetVocabulary vocabulary : vocabularies) {
             if (vocabulary.getName().equalsIgnoreCase(vocabularyName)) {
@@ -55,22 +59,11 @@ public class StreamingPortletHelper {
 
         List<CategoriesModel> categoryList = new ArrayList<>();
 
-        if (categoryId == -1) {
+        if (categoryId == 0) {
             List<AssetCategory> categories =
                     AssetCategoryLocalServiceUtil.getAssetCategories(-1, -1);
 
-            for (AssetCategory category : categories) {
-                if (category.getName().equals(vocabularyName)) {
-                    categoryId = category.getVocabularyId();
-                    break;
-                }
-            }
-
-            List<AssetCategory> categoriesList =
-                    AssetCategoryLocalServiceUtil.getChildCategories(
-                            categoryId, -1, -1, null);
-
-            categoriesList.parallelStream().forEach(cat -> {
+            categories.parallelStream().forEach(cat -> {
                 CategoriesModel categoriesModel = new CategoriesModel();
                 categoriesModel.setCategoryId(cat.getCategoryId());
                 categoriesModel.setCategoryName(cat.getName());
@@ -94,6 +87,22 @@ public class StreamingPortletHelper {
         return categoryList;
     }
 
+    public static CategoriesModel getCategoryModelByVocabularyName(
+            List<CategoriesModel> categoriesModelList, String vocabulary) {
+
+        CategoriesModel categoriesModel = new CategoriesModel();
+
+        for (CategoriesModel categoriesModelIterator : categoriesModelList) {
+            if (categoriesModelIterator.getCategoryName().equals(vocabulary)) {
+                categoriesModel = categoriesModelIterator;
+
+                break;
+            }
+        }
+
+        return categoriesModel;
+    }
+
     public static List<com.liferay.portal.kernel.search.Document> getDocumentsByCategory(
             ThemeDisplay themeDisplay, int start, int end, long categoryId)
                 throws RuntimeException {
@@ -103,23 +112,27 @@ public class StreamingPortletHelper {
         BooleanQuery filterQuery = new BooleanQueryImpl();
 
         try {
-            TermQuery termQueryCategoryIds = _buildTermQuery("assetCategoryIds", String.valueOf(categoryId));
+            TermQuery termQueryCategoryIds = _buildTermQuery(
+                    "assetCategoryIds", String.valueOf(categoryId));
             filterQuery.add(termQueryCategoryIds, BooleanClauseOccur.MUST);
 
-            TermQuery termQueryEntryClassName = _buildTermQuery("entryClassName", JournalArticle.class.getName());
+            TermQuery termQueryEntryClassName = _buildTermQuery(
+                    "entryClassName", JournalArticle.class.getName());
             filterQuery.add(termQueryEntryClassName, BooleanClauseOccur.MUST);
 
             TermQuery termQueryHead = _buildTermQuery("head", "true");
             filterQuery.add(termQueryHead, BooleanClauseOccur.MUST);
 
-            BooleanClause<Query> clause = new BooleanClauseImpl<>(filterQuery, BooleanClauseOccur.MUST);
+            BooleanClause<Query> clause = new BooleanClauseImpl<>(
+                    filterQuery, BooleanClauseOccur.MUST);
 
             SearchContext searchContext =
                     _getSearchContext(themeDisplay, start, end);
 
             searchContext.setBooleanClauses(new BooleanClause[]{clause});
 
-            FacetedSearcher facetedSearcher = FacetedSearcherManagerUtil.createFacetedSearcher();
+            FacetedSearcher facetedSearcher =
+                    FacetedSearcherManagerUtil.createFacetedSearcher();
 
             Hits hits = facetedSearcher.search(searchContext);
 
@@ -127,7 +140,8 @@ public class StreamingPortletHelper {
                 docs = hits.toList();
             }
         }
-        catch (RuntimeException | ParseException | SearchException runtimeException) {
+        catch (RuntimeException | ParseException
+               | SearchException runtimeException) {
             throw new RuntimeException(runtimeException);
         }
         return docs;
@@ -140,7 +154,7 @@ public class StreamingPortletHelper {
         Set<String> fields = new HashSet<String>();
 
         for (String name : fieldNames) {
-            fields.add(name + StringPool.EQUAL +
+            fields.add(name + StringPool.COMMA_AND_SPACE +
                     structure.getFieldDataType(name));
         }
         return fields;

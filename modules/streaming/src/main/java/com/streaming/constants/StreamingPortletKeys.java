@@ -5,4 +5,6 @@ package com.streaming.constants;
  */
 public class StreamingPortletKeys {
 	public static final String STREAMING = "com_streaming_StreamingPortlet";
+
+
 }
