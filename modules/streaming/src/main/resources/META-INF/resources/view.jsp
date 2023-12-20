@@ -2,7 +2,7 @@
 
 <%
 
-Object carouselData = (Object)request.getAttribute("carouselData");
+Object carouselData = (Object)request.getAttribute("carouselJsonData");
 
 %>
 

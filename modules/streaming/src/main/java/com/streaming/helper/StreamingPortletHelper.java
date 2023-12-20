@@ -11,6 +11,7 @@ import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.service.DLAppServiceUtil;
 import com.liferay.document.library.kernel.service.DLFileEntryServiceUtil;
 import com.liferay.document.library.util.DLURLHelper;
+import com.liferay.document.library.util.DLURLHelperUtil;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.petra.string.StringPool;
@@ -44,7 +45,8 @@ import org.osgi.service.component.annotations.Reference;
  */
 public class StreamingPortletHelper {
 
-    public static List<CategoriesModel> getCategories(String vocabularyName) {
+    public static List<CategoriesModel> getCategories(
+            String vocabularyName) {
         List<AssetVocabulary> vocabularies =
                 AssetVocabularyLocalServiceUtil.getAssetVocabularies(-1, -1);
 
@@ -182,14 +184,16 @@ public class StreamingPortletHelper {
                 Object groupId = jsonMap.get("groupId");
                 Object uuid = jsonMap.get("uuid");
 
-                DLFileEntry doc = DLFileEntryServiceUtil.getFileEntryByUuidAndGroupId(
-                        uuid.toString(), Long.parseLong(groupId.toString()));
+                DLFileEntry dlFileEntry =
+                        DLFileEntryServiceUtil.getFileEntryByUuidAndGroupId(
+                                uuid.toString(), Long.parseLong(groupId.toString()));
 
                 FileEntry fileEntry = DLAppServiceUtil.getFileEntry(
-                        doc.getFileEntryId());
+                        dlFileEntry.getFileEntryId());
+
                 FileVersion fileVersion = fileEntry.getFileVersion();
 
-                fieldResult = _dlurlHelper.getPreviewURL(
+                fieldResult = DLURLHelperUtil.getPreviewURL(
                         fileEntry, fileVersion, themeDisplay, StringPool.BLANK);
             }
         }
@@ -231,6 +235,4 @@ public class StreamingPortletHelper {
         return searchContext;
     }
 
-    @Reference
-    private static DLURLHelper _dlurlHelper;
 }

@@ -69,13 +69,13 @@ public class StreamingPortlet extends MVCPortlet {
 		String externalReferenceCode = group.getExternalReferenceCode();
 		long mvccVersion = group.getMvccVersion();
 
-		ContentModel contentModel = null;
+		ContentModel contentModel = new ContentModel();
 
 		try {
 			PreferencesPortletModel preferencesPortletModel =
 					StreamingPortletHelper.setPreferencesModel(
 							companyId, groupId, mvccVersion, contact.getUserId(),
-							StreamingCategoriesKeys.STREAMING_MOVIES_CATEGORY,
+							StreamingCategoriesKeys.STREAMING_VOCABULARY_CATEGORIES,
 							externalReferenceCode, renderRequest);
 
 			if (preferencesPortletModel.getClass() != null) {
@@ -107,60 +107,53 @@ public class StreamingPortlet extends MVCPortlet {
 						JournalArticleLocalServiceUtil.getLatestArticle(
 							groupId, articleId);
 
-				Set<String> fieldsNames = StreamingPortletHelper.getFieldsByStructure(
-					journalArticle);
+				Set<String> fieldsNames =
+						StreamingPortletHelper.getFieldsByStructure(
+								journalArticle);
 
-				String documentContent = journalArticle.getContentByLocale(
-						themeDisplay.getLanguageId());
+				String documentContent =
+						journalArticle.getContentByLocale(
+								themeDisplay.getLanguageId());
 
 				Document document;
-				document = SAXReaderUtil.read(new StringReader(documentContent));
+				document = SAXReaderUtil.read(
+						new StringReader(documentContent));
 
 				Map<String, String> map = new HashMap<>();
-
-				String color;
-				String date;
-				String description;
-				String fileEntry;
-				String title;
 
 				for (String values : fieldsNames) {
 					String[] value = values.split(StringPool.COMMA);
 				    switch (value[0])  {
-						case "Text13771537":
-							title = StreamingPortletHelper.getFields(
+						case "Text71580440":
+							map.put("title",
+									StreamingPortletHelper.getFields(
 									contentModel.getFieldSet(), value[0],
-									themeDisplay, document);
-							contentModel.setTitle(title);
-							map.put(value[0], title);
+									themeDisplay, document));
 
 							break;
 						case "RichText53999476":
-							description = StreamingPortletHelper.getFields(
-									contentModel.getFieldSet(), value[0], themeDisplay, document);
-							contentModel.setDescription(description);
-							map.put("rich-text", description);
-
+							map.put("rich-text",
+									StreamingPortletHelper.getFields(
+											contentModel.getFieldSet(), value[0],
+											themeDisplay, document));
 							break;
-						case "Image87907379":
-							fileEntry = StreamingPortletHelper.getFields(
-									contentModel.getFieldSet(), value[0], themeDisplay, document);
-							contentModel.setFileEntry(fileEntry);
-							map.put("image", fileEntry);
-
+						case "Image27099366":
+							map.put("image",
+									StreamingPortletHelper.getFields(
+											contentModel.getFieldSet(), value[0],
+											themeDisplay, document));
 							break;
 						case "Date63543359":
-							date = StreamingPortletHelper.getFields(
-									contentModel.getFieldSet(), value[0], themeDisplay, document);
-							contentModel.setDate(date);
-							map.put("date", date);
+							map.put("date", StreamingPortletHelper.getFields(
+									contentModel.getFieldSet(), value[0],
+									themeDisplay, document));
 
 							break;
-						case "Color64500276":
-							color = StreamingPortletHelper.getFields(
-									contentModel.getFieldSet(), value[0], themeDisplay, document);
-							contentModel.setColor(color);
-							map.put("color", color);
+						case "Color63584555":
+							map.put("color",
+									StreamingPortletHelper.getFields(
+											contentModel.getFieldSet(), value[0],
+											themeDisplay, document));
 
 							break;
 					}

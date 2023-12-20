@@ -67,7 +67,7 @@ public class ContentModel {
 
     private String _description;
 
-    private static final String _fieldSet = "Fieldset92342918";
+    private static final String _fieldSet = "Fieldset00068772";
 
     private String _fileEntry;
 
