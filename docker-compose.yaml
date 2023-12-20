@@ -1,10 +1,10 @@
 services:
     
     database:
-      image: streaming_portal_database/mysql
       build:
-        context: ./
-        dockerfile: ./environment/database/Dockerfile
+        context: ./env/mysql
+        dockerfile: Dockerfile
+      image: streaming_portal_database/mysql
       ports:
         - "3307:3306"
       environment:
@@ -15,25 +15,22 @@ services:
       restart: always
     
     liferay:
-      image: streaming-portal/liferay
       build:
         context: ./
-        dockerfile: ./environment/liferay/Dockerfile
+        dockerfile: env/liferay/Dockerfile
+      image: streaming-portal/liferay
       ports:
         - "8080:8080"
         - "11311:11311"
         - "8000:8000"
-      volumes:
-        - ./bundles/data/document_library:/opt/liferay/data/document_library
       environment:
         - LIFERAY_JPDA_ENABLED=true
         - LIFERAY_JVM_OPTS=-Xms8g -Xmx8g
         - LIFERAY_MODULE_PERIOD_FRAMEWORK_PERIOD_PROPERTIES_PERIOD_OSGI_PERIOD_CONSOLE=0.0.0.0:11311
-        - LIFERAY_RETRY_PERIOD_JDBC_PERIOD_ON_PERIOD_STARTUP_PERIOD_MAX_PERIOD_RETRIES=10
         - LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_DRIVER_UPPERCASEC_LASS_UPPERCASEN_AME=com.mysql.cj.jdbc.Driver
         - LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_URL=jdbc:mysql://database/streaminglportal?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false
         - LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_USERNAME=streaming_portal
         - LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_PASSWORD=test
-        - LIFERAY_UPGRADE_PERIOD_DATABASE_PERIOD_AUTO_PERIOD_RUN=true
+        # - LIFERAY_UPGRADE_PERIOD_DATABASE_PERIOD_AUTO_PERIOD_RUN=true
       depends_on:
         - database
