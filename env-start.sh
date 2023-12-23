@@ -1,6 +1,7 @@
 #!/bin/sh
 
 pattern=$1
+project_name="stg"
 
 check_task()
 {
@@ -10,6 +11,8 @@ check_task()
 cleanup() 
 {
     docker rm stg-liferay-1
+
+    docker compose -p "$project_name" up --build
 } 
 
 deploy()
@@ -24,6 +27,10 @@ deploy()
     cd ../
 
     echo "Deploy finished."
+
+    echo "Starting Portal ..."
+
+    docker compose -p "$project_name" up --build
 }
 
 docker_compose() 
@@ -37,7 +44,6 @@ docker_compose_service()
 }
 
 handle_flag() {
-    echo "$1"
     case "$1" in
         "clean")
             cleanup ;;
