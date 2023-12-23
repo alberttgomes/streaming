@@ -1,7 +1,8 @@
 #!/bin/sh
 
-pattern=$1
+pattern="(clean|deploy|help)"
 project_name="stg"
+starting="$(date +'%Y-%m-%d') Starting Portal ..."
 
 check_task()
 {
@@ -11,6 +12,10 @@ check_task()
 cleanup() 
 {
     docker rm stg-liferay-1
+
+    echo "$(date +'%Y-%m-%d') Cleaned."
+
+    echo "$starting"
 
     docker compose -p "$project_name" up --build
 } 
@@ -26,21 +31,21 @@ deploy()
     blade gw clean deploy
     cd ../
 
-    echo "Deploy finished."
+    echo "$(date +'%Y-%m-%d') Deployed."
 
-    echo "Starting Portal ..."
+    echo "$starting"
 
     docker compose -p "$project_name" up --build
 }
 
-docker_compose() 
+docker_compose()
 {
-    docker compose -p stg up --build
+    docker compose -p "$project_name" up --build
 }
 
 docker_compose_service()
 {
-   docker compose -p stg up --build "${1}"
+   docker compose -p "$project_name" up --build "${1}"
 }
 
 handle_flag() {
@@ -66,6 +71,9 @@ help()
 2. - deploy [Deploys modules and themes before starting]
 3. - clean [Cleans the container before starting]
 
+How to use theses commands, for example: 
+\"./env.start.sh deploy\"
+
 In addion, you can call specific services by adding the service name as a parameter.
 EOF
     exit 1
@@ -85,4 +93,3 @@ else
     echo "Calling to specified docker compose service..."
     docker_compose_service "$@"
 fi
-
