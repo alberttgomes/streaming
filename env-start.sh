@@ -1,16 +1,14 @@
-#!/bin/sh
+#!/bin/bash
 
 pattern="(clean|deploy|help)"
 project_name="stg"
 starting="$(date +'%Y-%m-%d') Starting Portal ..."
 
-check_task()
-{
+function check_task() {
     handle_flag "$1"
 }
 
-cleanup() 
-{
+function cleanup() {
     docker rm stg-liferay-1
 
     echo "$(date +'%Y-%m-%d') Cleaned."
@@ -20,8 +18,7 @@ cleanup()
     docker compose -p "$project_name" up --build
 } 
 
-deploy()
-{   
+function deploy() {   
     relativePath="/dev/projects/hotel/MePortlet/streaming"
 
     cd ~/"$relativePath"/modules || exit
@@ -38,17 +35,15 @@ deploy()
     docker compose -p "$project_name" up --build
 }
 
-docker_compose()
-{
+function docker_compose() {
     docker compose -p "$project_name" up --build
 }
 
-docker_compose_service()
-{
+function docker_compose_service() {
    docker compose -p "$project_name" up --build "${1}"
 }
 
-handle_flag() {
+function handle_flag() {
     case "$1" in
         "clean")
             cleanup ;;
@@ -62,8 +57,7 @@ handle_flag() {
     esac
 }
 
-help() 
-{
+function help() {
     cat <<EOF
  *** See the available commands below: *** 
 
