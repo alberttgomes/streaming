@@ -108,13 +108,14 @@ else
         check_task "$@"
 
         exit 1
+
     elif echo "$1" | grep -q "$SERVICES_PATTERN"
     then
         check_services_task "$@"
 
         exit 1
+        
     else
-
         echo "Unknown flag: $1"
        
         exit 1 
