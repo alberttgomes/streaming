@@ -2,42 +2,60 @@
 
 PROJECT_NAME="stg"
 SERVICES_PATTERN="database\|liferay"
-STARTING="$(date +'%Y-%m-%d') Starting Portal ..."
-TAG_PATTERN="clean\|deploy\|help"
+PATH_RELATIVE="/dev/projects/hotel/MePortlet/streaming"
+INITIALIZE="$(date +'%Y-%m-%d') DXP initializing..."
+TAG_PATTERN="clean\|cleanAll\|copy\|deploy\|down\|help\|up"
 
 function check_task() {
-    handle_flag "$1"
+    handle_flag "$1" "$2"
 }
 
 function check_services_task() {
-    echo "Getting docker compose service ${1} ..." 
-
     handle_service_flag "$1"
 }
+
+function cleanAll() {
+    docker rm "${PROJECT_NAME}-database-1" -f
+    docker rm "${PROJECT_NAME}-liferay-1" -f
+}
  
-function cleanup() {
-    docker rm stg-liferay-1 -f
+function cleanUp() {
+    docker rm "${PROJECT_NAME}-liferay-1" -f
 
     echo "$(date +'%Y-%m-%d') Cleaned."
 
-    echo "$STARTING"
+    echo "$INITIALIZE"
 
     docker compose -p "$PROJECT_NAME" up --build
 } 
 
-function deploy() {   
-    relativePath="/dev/projects/hotel/MePortlet/streaming"
+function copy() {
+    cd ~/"${PATH_RELATIVE}/bundles/osgi/modules/"  || exit
+    docker cp . "${PROJECT_NAME}-liferay-1:/opt/liferay/osgi/modules";
+    cd - || exit
+    
+    cd ~/"${PATH_RELATIVE}/themes/streaming-theme/dist/" || exit
+    docker cp . "${PROJECT_NAME}-liferay-1:/mnt/liferay/deploy"
+    cd - || exit
+}
 
-    cd ~/"$relativePath"/modules || exit
+function database() {
+    echo "Getting database docker compose service.."
+
+    docker compose -p "$PROJECT_NAME" up --build "$1"
+}
+
+function deploy() {   
+    cd ~/"$PATH_RELATIVE"/modules || exit
     blade gw clean deploy
     cd ../
-    cd ~/"$relativePath"/themes || exit
+    cd ~/"$PATH_RELATIVE"/themes || exit
     blade gw clean deploy
     cd ../
 
     echo "$(date +'%Y-%m-%d') Deployed."
 
-    echo "$STARTING"
+    echo "$INITIALIZE"
 
     docker compose -p "$PROJECT_NAME" up --build
 }
@@ -46,20 +64,48 @@ function docker_compose() {
     docker compose -p "$PROJECT_NAME" up --build
 }
 
-function docker_compose_service() {
-   docker compose -p "$PROJECT_NAME" up --build "${1}"
+function down() {
+    if [ "$2" ]
+    then
+        if echo "$2" | grep -q "\\-\|f"
+        then
+            echo "Stopping services force..."
+            
+            docker stop "${PROJECT_NAME}-database-1 \\-\|f"
+
+            docker stop "${PROJECT_NAME}-liferay-1 \\-\|f"
+
+            exit 1
+        else
+            echo "Unknown flag: $2"
+
+            exit 1
+        fi
+    else
+        echo "Stopping services.."
+
+        docker stop "${PROJECT_NAME}-database-1"
+
+        docker stop "${PROJECT_NAME}-liferay-1"
+
+        exit 1
+    fi
 }
 
 function handle_flag() {
     case "$1" in
         "clean")
-            cleanup ;;
+            cleanUp ;;
+        "cleanAll")
+            cleanAll ;;
         "deploy")
             deploy ;;
+        "down")
+            down "$@" "$@" ;;
         "help")
             help ;;
-        "liferay")
-            liferay ;;    
+        "up" )
+            up ;;
         *)
     esac
 }
@@ -67,20 +113,25 @@ function handle_flag() {
 function handle_service_flag() {
     case "$1" in
         "database")
-            cleanup ;;
+            database "${@}" ;;
         "liferay")
-            liferay ;;    
+            liferay "${@}" ;;    
         *)
     esac
 }
 
 function help() {
     cat <<EOF
- *** See the available commands below: *** 
+(*** SEE THE COMMANDS AVAILABLES BELLOW: ***) 
 
 1. - help [Explains usage and available commands]
-2. - deploy [Deploys modules and themes before starting]
-3. - clean [Cleans the container before starting]
+
+2. - clean [Cleans the container before started]
+3. - cleanAll [Clean all containers before started]
+4. - copy [Copy packages $(.jar) and, $(.war) built, to modules and themes to into the container]
+5. - deploy [Deploys modules and themes before started]
+6. - down [Stop all container. Can be used using the \\-\|f flag to force]
+7. - up [To up the containers wihtout build again]
 
 How to use theses commands, for example: 
 \"./env.start.sh deploy\"
@@ -95,12 +146,19 @@ EOF
 }
 
 function liferay() {
+    echo "Getting DXP docker compose service.."
+
     docker compose -p "$PROJECT_NAME" up --build liferay
+}
+
+function up() {
+    "${INITIALIZE}"
+
+    docker compose -p "$PROJECT_NAME" up
 }
 
 if [ $# -eq 0 ]
 then
-    echo "Getting docker compose full services ..."
     docker_compose
 else
     if echo "$1" | grep -q "$TAG_PATTERN"
@@ -121,3 +179,4 @@ else
         exit 1 
     fi
 fi
+
