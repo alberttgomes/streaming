@@ -98,6 +98,8 @@ function handle_flag() {
             cleanUp ;;
         "cleanAll")
             cleanAll ;;
+        "copy")
+            copy ;;
         "deploy")
             deploy ;;
         "down")
