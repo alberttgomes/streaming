@@ -30,6 +30,7 @@ import com.streaming.model.CategoriesModel;
 import com.streaming.model.PreferencesPortletModel;
 import com.streaming.constants.StreamingCategoriesKeys;
 
+import com.streaming.util.StreamingPortletUtil;
 import org.osgi.service.component.annotations.Component;
 
 /**
@@ -86,91 +87,111 @@ public class StreamingPortlet extends MVCPortlet {
 					StreamingPortletHelper.getCategories(
 							preferencesPortletModel.getVocabularyCategories());
 
-			CategoriesModel categoriesModel =
-					StreamingPortletHelper.getCategoryModelByVocabularyName(
-							categoriesModelList,
-							StreamingCategoriesKeys.STREAMING_MOVIES_CATEGORY);
+			List<Object> objectList = new ArrayList<>();
 
-			List<com.liferay.portal.kernel.search.Document> documents =
-					StreamingPortletHelper.getDocumentsByCategory(
-							themeDisplay, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
-							categoriesModel.getCategoryId());
+			for (String categoryByVocabulary :
+					StreamingPortletUtil.streamingVocabularyValuesToArray()) {
+				CategoriesModel categoriesModel =
+						StreamingPortletHelper.getCategoryModelByVocabularyName(
+								categoriesModelList, categoryByVocabulary);
 
-			int count = 0;
-
-			for (com.liferay.portal.kernel.search.Document doc : documents) {
-				count++;
-
-				String articleId = doc.get("articleId");
-
-				JournalArticle journalArticle =
-						JournalArticleLocalServiceUtil.getLatestArticle(
-							groupId, articleId);
-
-				Set<String> fieldsNames =
-						StreamingPortletHelper.getFieldsByStructure(
-								journalArticle);
-
-				String documentContent =
-						journalArticle.getContentByLocale(
-								themeDisplay.getLanguageId());
-
-				Document document;
-				document = SAXReaderUtil.read(
-						new StringReader(documentContent));
-
-				Map<String, String> map = new HashMap<>();
-
-				for (String values : fieldsNames) {
-					String[] value = values.split(StringPool.COMMA);
-				    switch (value[0])  {
-						case "Text71580440":
-							map.put("title",
-									StreamingPortletHelper.getFields(
-									contentModel.getFieldSet(), value[0],
-									themeDisplay, document));
-
-							break;
-						case "RichText53999476":
-							map.put("rich-text",
-									StreamingPortletHelper.getFields(
-											contentModel.getFieldSet(), value[0],
-											themeDisplay, document));
-							break;
-						case "Image27099366":
-							map.put("image",
-									StreamingPortletHelper.getFields(
-											contentModel.getFieldSet(), value[0],
-											themeDisplay, document));
-							break;
-						case "Date63543359":
-							map.put("date", StreamingPortletHelper.getFields(
-									contentModel.getFieldSet(), value[0],
-									themeDisplay, document));
-
-							break;
-						case "Color63584555":
-							map.put("color",
-									StreamingPortletHelper.getFields(
-											contentModel.getFieldSet(), value[0],
-											themeDisplay, document));
-
-							break;
-					}
+				if (categoriesModel == null) {
+					continue;
 				}
-				carouselRender.put("field_" + count, map);
+
+				List<com.liferay.portal.kernel.search.Document> documents =
+						StreamingPortletHelper.getDocumentsByCategory(
+								themeDisplay, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+								categoriesModel.getCategoryId());
+
+				int count = 0;
+
+				Map<String, Object> carouselRender = new HashMap<>();
+
+				for (com.liferay.portal.kernel.search.Document doc : documents) {
+					count++;
+
+					String articleId = doc.get("articleId");
+
+					JournalArticle journalArticle =
+							JournalArticleLocalServiceUtil.getLatestArticle(
+									groupId, articleId);
+
+					Set<String> fieldsNames =
+							StreamingPortletHelper.getFieldsByStructure(
+									journalArticle);
+
+					String documentContent =
+							journalArticle.getContentByLocale(
+									themeDisplay.getLanguageId());
+
+					Document document;
+					document = SAXReaderUtil.read(new StringReader(documentContent));
+
+					Map<String, String> map = new HashMap<>();
+
+					for (String values : fieldsNames) {
+						String[] value = values.split(StringPool.COMMA);
+						switch (value[0])  {
+							case "Text00874470":
+								map.put("title",
+										StreamingPortletHelper.getFields(
+												contentModel.getFieldSet(), value[0],
+												themeDisplay, document));
+								break;
+							case "RichText22021739":
+								map.put("description",
+										StreamingPortletHelper.getFields(
+												contentModel.getFieldSet(), value[0],
+												themeDisplay, document));
+								break;
+							case "Image27507480":
+								map.put("image",
+										StreamingPortletHelper.getFields(
+												contentModel.getFieldSet(), value[0],
+												themeDisplay, document));
+								break;
+							case "Date94594405":
+								map.put("date", StreamingPortletHelper.getFields(
+										contentModel.getFieldSet(), value[0],
+										themeDisplay, document));
+								break;
+							case "Color12880647":
+								map.put("color",
+										StreamingPortletHelper.getFields(
+												contentModel.getFieldSet(), value[0],
+												themeDisplay, document));
+								break;
+						}
+						if ((fieldsNames.size() -1) == map.size()) {
+							map.put("category",
+									categoriesModel.getCategoryName());
+						}
+					}
+
+					carouselRender.put("index" + count, map);
+				}
+
+				if (!carouselRender.isEmpty()) {
+					List<Map<String, Object>> carouselRenderList = new ArrayList<>();
+
+					carouselRenderList.add(carouselRender);
+
+					List<Object> objects = StreamingPortletHelper.convertObjectData(
+							carouselRenderList);
+
+					objectList.add(objects);
+				}
 			}
+
+			renderRequest.setAttribute("carouselData", objectList);
+
+			super.doView(renderRequest, renderResponse);
 		}
 		catch (PortalException | DocumentException exception) {
 			throw new PortletException(exception);
 		}
-		finally {
-			renderRequest.setAttribute("carouselJsonData", carouselRender);
-
-			super.doView(renderRequest, renderResponse);
-		}
 	}
 
 	protected PreferencesPortletModel preferencesPortlet = null;
-	protected final Map<String, Object> carouselRender = new LinkedHashMap<>();
 }

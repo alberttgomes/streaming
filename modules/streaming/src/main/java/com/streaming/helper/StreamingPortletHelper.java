@@ -10,7 +10,6 @@ import com.liferay.asset.kernel.service.AssetVocabularyLocalServiceUtil;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.service.DLAppServiceUtil;
 import com.liferay.document.library.kernel.service.DLFileEntryServiceUtil;
-import com.liferay.document.library.util.DLURLHelper;
 import com.liferay.document.library.util.DLURLHelperUtil;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.journal.model.JournalArticle;
@@ -37,13 +36,23 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import java.util.*;
 
-import org.osgi.service.component.annotations.Reference;
-
 
 /**
  * @author Albert Gomes Cabral
  */
 public class StreamingPortletHelper {
+
+    public static List<Object> convertObjectData(
+            List<Map<String, Object>> dataMapList) throws JsonProcessingException {
+        List<Object> objectList = new ArrayList<>();
+        ObjectMapper mapper = new ObjectMapper();
+
+        for (Map<String, Object> map : dataMapList) {
+            String jsonParser = mapper.writeValueAsString(map);
+            objectList.add(jsonParser);
+        }
+        return objectList;
+    }
 
     public static List<CategoriesModel> getCategories(
             String vocabularyName) {

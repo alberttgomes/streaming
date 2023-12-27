@@ -1,2 +1,38 @@
-.streaming {
+$maxImageHeight: 300px;
+
+.img-carousel {
+    max-height: $maxImageHeight;
+    width: auto;
+}
+
+.position-relative {
+    position: relative;
+    img {
+        width: 100%;
+        display: block;
+    }
+    .carousel-caption {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 15px;
+        display: none;
+        h5 {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+        p {
+            font-size: 14px;
+            margin-bottom: 0;
+        }
+    }
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
 }
