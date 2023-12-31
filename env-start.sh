@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FLAG_PATTERN="clean\|cleanAll\|copy\|deploy\|down\|help\|up"
+FLAG_PATTERN="clean\|cleanAll\|copy\|deploy\|deployToDocker\|down\|help\|up"
 INITIALIZE="$(date +'%Y-%m-%d') DXP initializing..."
 PATH_RELATIVE="/dev/projects/hotel/MePortlet/streaming"
 PROJECT_NAME="stg"
@@ -60,6 +60,33 @@ function deploy() {
     docker compose -p "$PROJECT_NAME" up --build
 }
 
+function deployToDocker() {
+    if [ "$1" ]
+    then
+        cd ~/"$PATH_RELATIVE"/modules/"$1" || return
+
+        blade gw clean deploy
+        
+        exit 1
+
+    elif [ "$1" ] && [ "$2" ]
+    then
+        cd ~/"$PATH_RELATIVE"/modules/"$1"/"$2" || return
+
+        blade gw clean deploy
+
+        exit 1
+
+    else
+        cd ~/"$PATH_RELATIVE"/modules/ || return
+
+        blade gw clean deploy
+
+        exit 1
+
+    fi
+}
+
 function docker_compose() {
     docker compose -p "$PROJECT_NAME" up --build
 }
@@ -102,6 +129,8 @@ function handle_flag() {
             copy ;;
         "deploy")
             deploy ;;
+        "deployToDocker")
+            deployToDocker "$@" "$@" ;;    
         "down")
             down "$@" "$@" ;;
         "help")
@@ -115,9 +144,9 @@ function handle_flag() {
 function handle_service_flag() {
     case "$1" in
         "database")
-            database "${@}" ;;
+            database "$@" ;;
         "liferay")
-            liferay "${@}" ;;    
+            liferay "$@" ;;    
         *)
     esac
 }
