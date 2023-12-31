@@ -1,10 +1,10 @@
 #!/bin/bash
 
+FLAG_PATTERN="clean\|cleanAll\|copy\|deploy\|down\|help\|up"
+INITIALIZE="$(date +'%Y-%m-%d') DXP initializing..."
+PATH_RELATIVE="/dev/projects/hotel/MePortlet/streaming"
 PROJECT_NAME="stg"
 SERVICES_PATTERN="database\|liferay"
-PATH_RELATIVE="/dev/projects/hotel/MePortlet/streaming"
-INITIALIZE="$(date +'%Y-%m-%d') DXP initializing..."
-TAG_PATTERN="clean\|cleanAll\|copy\|deploy\|down\|help\|up"
 
 function check_task() {
     handle_flag "$1" "$2"
@@ -163,7 +163,7 @@ if [ $# -eq 0 ]
 then
     docker_compose
 else
-    if echo "$1" | grep -q "$TAG_PATTERN"
+    if echo "$1" | grep -q "$FLAG_PATTERN"
     then
         check_task "$@"
 
