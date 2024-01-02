@@ -4,7 +4,6 @@ import com.liferay.petra.function.UnsafeRunnable;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.scheduler.*;
-import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.*;
 
 /**
@@ -12,13 +11,12 @@ import org.osgi.service.component.annotations.*;
  */
 @Component(
         immediate = true,
-        configurationPolicy = ConfigurationPolicy.OPTIONAL,
-        service = NewsNotificationSchedulerJob.class
+        service = SchedulerJobConfiguration.class
 )
-public class NewsNotificationSchedulerJob implements SchedulerJobConfiguration {
+public class NoticeUserSchedulerJob implements SchedulerJobConfiguration {
     @Override
     public String getName() {
-        return NewsNotificationSchedulerJob.class.getName();
+        return NoticeUserSchedulerJob.class.getName();
     }
 
     @Override
@@ -30,17 +28,11 @@ public class NewsNotificationSchedulerJob implements SchedulerJobConfiguration {
 
     @Override
     public TriggerConfiguration getTriggerConfiguration() {
-        if (Validator.isNotNull(_DEFAULT_CRON_EXPRESSION)) {
-            return TriggerConfiguration.createTriggerConfiguration(
-                    _DEFAULT_CRON_EXPRESSION);
-        }
         return TriggerConfiguration.createTriggerConfiguration(
                 1, TimeUnit.MINUTE);
     }
 
-    private static final String _DEFAULT_CRON_EXPRESSION = "0 */2 * ? * *";
-
     private static final Log _log = LogFactoryUtil.getLog(
-            NewsNotificationSchedulerJob.class);
+            NoticeUserSchedulerJob.class);
 
 }
