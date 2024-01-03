@@ -61,17 +61,20 @@ function deploy() {
 }
 
 function deployToDocker() {
-    if [ "$1" ]
+    if [ "$2" ]
     then
-        cd ~/"$PATH_RELATIVE"/modules/"$1" || return
+        cd ~/"$PATH_RELATIVE"/modules/"$2" || return
 
         blade gw clean deploy
+
+        cd ~/"$PATH_RELATIVE"/bundles/osgi/modules/ || return
+        docker cp . "${PROJECT_NAME}-liferay-1:/opt/liferay/osgi/modules";
         
         exit 1
 
-    elif [ "$1" ] && [ "$2" ]
+    elif [ "$2" ] && [ "$3" ]
     then
-        cd ~/"$PATH_RELATIVE"/modules/"$1"/"$2" || return
+        cd ~/"$PATH_RELATIVE"/modules/"$2"/"$3" || return
 
         blade gw clean deploy
 
@@ -81,7 +84,10 @@ function deployToDocker() {
         cd ~/"$PATH_RELATIVE"/modules/ || return
 
         blade gw clean deploy
-
+        
+        cd ~/"$PATH_RELATIVE"/bundles/osgi/modules/ || return
+        docker cp . "${PROJECT_NAME}-liferay-1:/opt/liferay/osgi/modules";
+        
         exit 1
 
     fi
