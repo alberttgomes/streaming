@@ -17,15 +17,7 @@ request.setAttribute("carouselData", carouselData);
 <div class="container">
     <div id="carouselStreaming" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators" id="carouselIndicators"></ol>
-        <div class="carousel-inner" id="carouselInner"></div>
-        <a class="carousel-control-prev" href="#carouselStreaming" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselStreaming" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>    
+        <div class="carousel-inner" id="carouselInner"></div>  
     </div>
 </div>
 
@@ -109,7 +101,8 @@ request.setAttribute("carouselData", carouselData);
     
                     const description = document.createElement('p');
                     description.innerHTML = slideItem.description;
-    
+
+
                     carouselCaption.appendChild(title);
                     carouselCaption.appendChild(description);
     
@@ -120,6 +113,46 @@ request.setAttribute("carouselData", carouselData);
                     col.appendChild(positionRelative);
     
                     slide.appendChild(col);
+
+                    // Next slide
+                    const nextControl = document.createElement('a');
+                    nextControl.classList.add('carousel-control-next');
+                    nextControl.href = `#${category}Carousel${index}`;
+                    nextControl.setAttribute('role', 'button');
+                    nextControl.setAttribute('data-slide', 'next');
+
+                    const nextIcon = document.createElement('span');
+                    nextIcon.classList.add('carousel-control-next-icon');
+                    nextIcon.setAttribute('aria-hidden', 'true');
+
+                    const nextText = document.createElement('span');
+                    nextText.classList.add('sr-only');
+                    nextText.textContent = 'Next';
+
+                    nextControl.appendChild(nextIcon);
+                    nextControl.appendChild(nextText);
+
+                    newCarousel.appendChild(nextControl);
+
+                    // Previous slide
+                    const prevControl = document.createElement('a');
+                    prevControl.classList.add('carousel-control-prev');
+                    prevControl.href = `#${category}Carousel${index}`;
+                    prevControl.setAttribute('role', 'button');
+                    prevControl.setAttribute('data-slide', 'prev');
+
+                    const prevIcon = document.createElement('span');
+                    prevIcon.classList.add('carousel-control-prev-icon');
+                    prevIcon.setAttribute('aria-hidden', 'true');
+
+                    const prevText = document.createElement('span');
+                    prevText.classList.add('sr-only');
+                    prevText.textContent = 'Previous';
+
+                    prevControl.appendChild(prevIcon);
+                    prevControl.appendChild(prevText);
+
+                    newCarousel.appendChild(prevControl);
                 });
     
                 carouselInner.appendChild(slide);
